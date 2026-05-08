@@ -1,0 +1,2671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=390, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>GrabDoctor Maternal App</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Georgia,'Times New Roman',serif;background:#FFF8F9;max-width:390px;margin:0 auto;min-height:100vh;position:relative;overflow-x:hidden}
+  :root{
+    --rose:#E8547A;--rose-soft:#FF8FAB;--peach:#FFB8C6;--blush:#FFE4EC;--cream:#FFF8F9;
+    --teal:#0D9488;--teal-soft:#5EEAD4;--amber:#F59E0B;--jade:#22C55E;--sky:#38BDF8;
+    --ink:#1E1523;--slate:#64748B;--mist:#F1F5F9;--white:#FFFFFF;--blue:#3B82F6;
+  }
+  .screen{display:none;padding-bottom:90px;animation:fadeUp .3s ease}
+  .screen.active{display:block}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  
+  .hdr{padding:52px 20px 24px;position:relative;overflow:hidden;border-bottom-left-radius:20px;border-bottom-right-radius:20px;margin-bottom:12px}
+  .hdr-rose{background:linear-gradient(160deg,var(--rose) 0%,var(--rose-soft) 55%,var(--peach) 100%)}
+  .hdr-teal{background:linear-gradient(160deg,var(--teal),var(--teal-soft))}
+  .hdr-jade{background:linear-gradient(160deg,#16A34A,#4ADE80)}
+  .hdr-amber{background:linear-gradient(160deg,var(--amber),#FCD34D)}
+  .hdr-blue{background:linear-gradient(160deg,#3B82F6,#93C5FD)}
+  
+  .hdr-label{font-size:10px;color:rgba(255,255,255,.8);font-family:sans-serif;letter-spacing:2px;text-transform:uppercase}
+  .hdr-title{font-size:20px;font-weight:bold;color:#fff;margin-top:4px}
+  .hdr-sub{font-size:12px;color:rgba(255,255,255,.85);font-family:sans-serif;margin-top:2px}
+  .pad{padding:0 16px}
+  .card{background:#fff;border-radius:20px;padding:16px;box-shadow:0 2px 16px rgba(232,84,122,.08);border:1px solid var(--blush);margin-bottom:12px}
+  
+  .sec-hdr{display:flex;justify-content:space-between;align-items:center;margin:16px 0 10px}
+  .sec-hdr h3{font-size:15px;font-weight:bold;color:var(--ink)}
+  .sec-hdr span{font-size:12px;color:var(--rose);font-family:sans-serif;font-weight:600;cursor:pointer}
+  .badge{font-size:9px;font-family:sans-serif;font-weight:700;letter-spacing:.8px;border-radius:6px;padding:2px 7px;display:inline-block;text-transform:uppercase}
+  
+  .btn-rose{background:linear-gradient(135deg,var(--rose),var(--rose-soft));border:none;border-radius:10px;padding:8px 16px;font-size:12px;color:#fff;font-family:sans-serif;font-weight:700;cursor:pointer;width:100%;text-align:center}
+  .btn-teal{background:var(--teal);border:none;border-radius:10px;padding:8px 16px;font-size:12px;color:#fff;font-family:sans-serif;font-weight:700;cursor:pointer;width:100%;text-align:center}
+  .btn-outline{background:transparent;border:1px solid var(--rose);color:var(--rose);border-radius:10px;padding:8px 16px;font-size:12px;font-family:sans-serif;font-weight:700;cursor:pointer;width:100%;text-align:center}
+  
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+
+  /* Bottom Nav */
+  .bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:390px;max-width:100%;background:rgba(255,255,255,.97);backdrop-filter:blur(24px);border-top:1px solid var(--blush);display:flex;justify-content:space-around;padding:10px 0 18px;z-index:200}
+  .bnav button{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;padding:4px 10px;border-radius:12px}
+  .bnav button .nav-icon{font-size:22px;transition:all .2s;display:block;line-height:1}
+  .bnav button .nav-label{font-size:9px;font-family:sans-serif;letter-spacing:.3px;color:var(--slate);font-weight:400;transition:color .2s}
+  .bnav button.active .nav-icon{transform:scale(1.18);color:var(--rose)}
+  .bnav button.active .nav-label{color:var(--rose);font-weight:700}
+  
+  /* Modals */
+  .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:2000;display:none;align-items:center;justify-content:center;opacity:0;transition:opacity 0.3s}
+  .modal-overlay.show{display:flex;opacity:1}
+  .modal{background:var(--white);width:90%;max-width:350px;border-radius:20px;padding:20px;transform:translateY(20px);transition:transform 0.3s;max-height:85vh;overflow-y:auto}
+  .modal-overlay.show .modal{transform:translateY(0)}
+  .input-field{width:100%;padding:12px;border:1px solid var(--slate);border-radius:10px;margin-top:8px;font-size:14px;font-family:sans-serif;outline:none}
+
+  /* Chatbot */
+  .chat-msg{max-width:85%;padding:10px 14px;border-radius:12px;font-size:13px;font-family:sans-serif;line-height:1.4;margin-bottom:8px}
+  .chat-ai{background:rgba(13,148,136,.1);border:1px solid rgba(13,148,136,.3);align-self:flex-start;border-bottom-left-radius:2px;color:var(--teal)}
+  .chat-user{background:var(--teal);color:white;align-self:flex-end;border-bottom-right-radius:2px;margin-left:auto}
+  
+  .filter-btn{background:rgba(255,255,255,0.8);border:1px solid var(--slate);border-radius:12px;padding:6px 12px;font-size:11px;font-family:sans-serif;font-weight:700;cursor:pointer;color:var(--slate);margin-right:4px}
+  .filter-btn.active{background:var(--rose);color:white;border-color:var(--rose)}
+
+  /* Login Screen — full-page overlay, not part of module screens */
+  #loginPage{position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;display:flex;flex-direction:column;background:linear-gradient(160deg,var(--rose) 0%,var(--rose-soft) 55%,var(--peach) 100%);max-width:390px;left:50%;transform:translateX(-50%)}
+  #loginPage.hidden{display:none}
+  .login-logo{text-align:center;padding:60px 20px 30px}
+  .login-card{background:white;border-radius:28px 28px 0 0;flex:1;padding:30px 24px;overflow-y:auto}
+
+  /* Track Modal */
+  .track-step{display:flex;gap:12px;margin-bottom:16px;align-items:flex-start}
+  .track-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:2px}
+  .track-line{width:2px;background:var(--blush);height:100%;position:absolute;left:15px;top:34px}
+  .track-step-wrap{position:relative}
+
+  /* Vital range badge */
+  .vital-range{font-size:9px;font-family:sans-serif;font-weight:600;padding:2px 6px;border-radius:5px;margin-top:3px;display:inline-block}
+  .range-normal{background:#D1FAE5;color:#065F46}
+  .range-low{background:#FEF3C7;color:#92400E}
+  .range-high{background:#FEE2E2;color:#991B1B}
+
+  /* AI Maternity Assistant */
+  .ai-suggestion{background:var(--blush);border-radius:10px;padding:8px 10px;font-size:11px;font-family:sans-serif;color:var(--rose);cursor:pointer;border:1px solid var(--peach);flex-shrink:0}
+
+  /* Profile pic upload */
+  .prof-pic-wrap{position:relative;width:60px;height:60px;cursor:pointer}
+  .prof-pic-wrap .edit-overlay{position:absolute;bottom:0;right:0;width:18px;height:18px;background:var(--rose);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:white}
+
+  /* Utilities */
+  .hide{display:none!important}
+
+  /* Family Sync */
+  .family-member{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--mist)}
+  .family-avatar{width:36px;height:36px;border-radius:50%;background:var(--blush);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:bold;color:var(--rose);flex-shrink:0}
+
+  /* ── GrabDoc Tiles ── */
+  .gdoc-tile{background:#fff;border-radius:18px;padding:16px 10px;box-shadow:0 2px 12px rgba(0,0,0,.07);border:1px solid var(--mist);text-align:center;cursor:pointer;transition:transform .15s,box-shadow .15s;display:flex;flex-direction:column;align-items:center;gap:6px}
+  .gdoc-tile:active{transform:scale(.96)}
+  .gdoc-tile .tile-icon{font-size:30px;line-height:1}
+  .gdoc-tile .tile-label{font-size:12px;font-weight:700;color:var(--ink);font-family:sans-serif;line-height:1.2}
+  .gdoc-tile .tile-sub{font-size:9px;color:var(--slate);font-family:sans-serif}
+
+  /* ── Filter Panel ── */
+  .filter-panel{background:#fff;border-radius:14px;padding:12px;margin-bottom:12px;border:1px solid var(--mist);box-shadow:0 2px 8px rgba(0,0,0,.05)}
+  .filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+  .chip{border-radius:20px;padding:5px 12px;font-size:11px;font-family:sans-serif;font-weight:600;cursor:pointer;border:1.5px solid transparent;transition:all .2s;white-space:nowrap}
+  .chip-active{background:var(--rose);color:#fff;border-color:var(--rose)}
+  .chip-default{background:#F8FAFC;color:var(--slate);border-color:var(--mist)}
+  select.filter-sel{background:#F8FAFC;border:1.5px solid var(--mist);border-radius:20px;padding:5px 10px;font-size:11px;font-family:sans-serif;color:var(--ink);cursor:pointer;outline:none;flex:1}
+
+  /* ── Doctor Card ── */
+  .doc-availability{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-family:sans-serif;font-weight:600;padding:2px 7px;border-radius:5px;margin-top:4px}
+
+  /* ── Meals Tabs ── */
+  .meal-tabs{display:flex;background:#fff;border-radius:16px;padding:4px;box-shadow:0 1px 8px rgba(0,0,0,.07);margin:0 16px 14px;border:1px solid var(--mist)}
+  .meal-tab{flex:1;padding:8px 4px;text-align:center;font-size:11px;font-family:sans-serif;font-weight:600;color:var(--slate);border-radius:12px;cursor:pointer;transition:all .2s}
+  .meal-tab.active{background:linear-gradient(135deg,#16A34A,#4ADE80);color:#fff}
+
+  /* Meal food item */
+  .food-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #F8FAFC}
+  .food-item:last-child{border-bottom:none}
+  .food-emoji{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+
+  /* Meal section group */
+  .meal-section{background:#fff;border-radius:16px;padding:12px 14px;box-shadow:0 1px 8px rgba(0,0,0,.06);border:1px solid #F0F9F0;margin-bottom:10px}
+  .meal-section-hdr{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #F0F9F0}
+
+  /* Booking time slot */
+  .time-slot{background:#F8FAFC;border:1.5px solid var(--mist);border-radius:10px;padding:8px;font-size:12px;font-family:sans-serif;text-align:center;cursor:pointer;transition:all .2s;color:var(--slate)}
+  .time-slot.selected,.time-slot:hover{background:var(--rose);color:#fff;border-color:var(--rose)}
+  .time-slot.unavailable{opacity:.4;cursor:not-allowed;pointer-events:none}
+
+  /* Profile emoji icon */
+  .prof-icon{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+
+  /* AI meal loading bar */
+  @keyframes loadBar{0%{width:0%;margin-left:0}50%{width:70%;margin-left:15%}100%{width:0%;margin-left:100%}}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════ LOGIN PAGE (standalone overlay) ═══════════════════════════ -->
+<div id="loginPage">
+  <div class="login-logo">
+    <div style="font-size:48px;margin-bottom:8px">🤰</div>
+    <div style="font-size:26px;font-weight:bold;color:white;font-family:sans-serif">GrabDoctor</div>
+    <div style="font-size:13px;color:rgba(255,255,255,.85);font-family:sans-serif;margin-top:4px">Maternal Health Companion</div>
+  </div>
+  <div class="login-card">
+    <div style="font-size:22px;font-weight:bold;color:var(--ink);margin-bottom:4px;font-family:sans-serif">Welcome Back 🌸</div>
+    <div style="font-size:13px;color:var(--slate);font-family:sans-serif;margin-bottom:24px">Sign in to your account</div>
+    
+    <label style="font-size:11px;font-weight:700;color:var(--slate);font-family:sans-serif;text-transform:uppercase;letter-spacing:.8px">Email</label>
+    <input type="email" id="loginEmail" class="input-field" placeholder="sarah@example.com" value="sarah@example.com" style="margin-bottom:16px">
+    
+    <label style="font-size:11px;font-weight:700;color:var(--slate);font-family:sans-serif;text-transform:uppercase;letter-spacing:.8px">Password</label>
+    <div style="position:relative">
+      <input type="password" id="loginPass" class="input-field" placeholder="••••••••" value="password123">
+      <span onclick="togglePwd()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:16px;color:var(--slate)">👁</span>
+    </div>
+    
+    <div style="text-align:right;margin:8px 0 20px">
+      <span style="font-size:12px;color:var(--rose);font-family:sans-serif;cursor:pointer;font-weight:600">Forgot Password?</span>
+    </div>
+    
+    <button class="btn-rose" onclick="doLogin()" style="font-size:15px;padding:14px">Sign In</button>
+    
+    <div style="text-align:center;margin-top:16px;font-size:12px;font-family:sans-serif;color:var(--slate)">
+      Don't have an account? <span style="color:var(--rose);font-weight:700;cursor:pointer" onclick="alert('Registration coming soon!')">Sign Up</span>
+    </div>
+    
+    <div style="display:flex;align-items:center;margin:16px 0">
+      <div style="flex:1;height:1px;background:var(--mist)"></div>
+      <div style="font-size:11px;color:var(--slate);font-family:sans-serif;padding:0 12px">or continue with</div>
+      <div style="flex:1;height:1px;background:var(--mist)"></div>
+    </div>
+    
+    <button onclick="doLogin()" style="width:100%;background:white;border:1px solid var(--mist);border-radius:10px;padding:12px;font-size:13px;font-family:sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;color:var(--ink)">
+      <span style="font-size:18px">🔵</span> Continue with Google
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ HOME SCREEN ═══════════════════════════ -->
+<div id="s-home" class="screen active">
+  <div class="hdr hdr-rose">
+    <div style="position:absolute;top:-60px;right:-40px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.1)"></div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px">
+      <div>
+        <div style="font-size:22px;font-weight:bold;color:#fff;margin-top:3px;line-height:1.2" id="greetName" data-tr="greet">Good Morning, Sarah 🌸</div>
+      </div>
+      <div id="headerAvatar" onclick="nav('profile')" style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;color:#fff;border:2px solid rgba(255,255,255,.5);cursor:pointer">SL</div>
+    </div>
+    
+    <div style="background:rgba(255,255,255,.22);backdrop-filter:blur(12px);border-radius:20px;padding:16px 18px;border:1px solid rgba(255,255,255,.35)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <div>
+          <div style="font-size:10px;color:rgba(255,255,255,.8);font-family:sans-serif;letter-spacing:1.5px;text-transform:uppercase" data-tr="tri">Second Trimester</div>
+          <div style="font-size:30px;font-weight:bold;color:#fff;line-height:1" data-tr="week">Week 24</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:32px">🌽</div>
+          <div style="font-size:9px;color:rgba(255,255,255,.9);font-family:sans-serif">Baby Size</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pad">
+    <div class="sec-hdr">
+      <h3 data-tr="vitals">📊 Today's Vitals</h3>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span onclick="openModal('modal-logvitals')" style="font-size:12px;color:var(--teal);font-family:sans-serif;font-weight:600;cursor:pointer">+ Log</span>
+        <span id="syncBtn" onclick="syncWearable()">Sync <i class="ti ti-refresh"></i></span>
+      </div>
+    </div>
+    <div class="grid2" id="vitalsGrid">
+      <div class="card" style="padding:12px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="font-size:22px">🩺</div>
+          <div>
+            <div style="font-size:16px;font-weight:bold;color:var(--ink);line-height:1">118/76</div>
+            <div style="font-size:10px;color:var(--slate);font-family:sans-serif">Blood Pressure</div>
+            <span class="vital-range range-normal">Normal (90-140/60-90)</span>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="padding:12px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="font-size:22px">❤️</div>
+          <div>
+            <div style="font-size:16px;font-weight:bold;color:var(--ink);line-height:1">82<span style="font-size:10px"> bpm</span></div>
+            <div style="font-size:10px;color:var(--slate);font-family:sans-serif">Heart Rate</div>
+            <span class="vital-range range-normal">Normal (60–100 bpm)</span>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="padding:12px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="font-size:22px">⚖️</div>
+          <div>
+            <div style="font-size:16px;font-weight:bold;color:var(--ink);line-height:1">62.4<span style="font-size:10px"> kg</span></div>
+            <div style="font-size:10px;color:var(--slate);font-family:sans-serif">Weight</div>
+            <span class="vital-range range-normal">On Track (58–68 kg)</span>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="padding:12px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="font-size:22px">🦶</div>
+          <div>
+            <div style="font-size:16px;font-weight:bold;color:var(--ink);line-height:1">12<span style="font-size:10px"> kicks</span></div>
+            <div style="font-size:10px;color:var(--slate);font-family:sans-serif">Baby Kicks</div>
+            <span class="vital-range range-low">Target ≥10/day</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI MATERNITY ASSISTANT (replaces Quick Actions) -->
+    <div class="sec-hdr"><h3>🤖 AI Maternity Assistant</h3></div>
+    <div class="card" style="padding:0;overflow:hidden;border-color:rgba(232,84,122,.4);">
+      <div style="background:linear-gradient(135deg,var(--rose),var(--rose-soft));padding:12px 14px;display:flex;align-items:center;gap:8px">
+        <div style="font-size:22px">🤖</div>
+        <div>
+          <div style="font-size:13px;font-weight:bold;color:white;font-family:sans-serif">Your Maternal AI</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.85);font-family:sans-serif">Ask me anything about your pregnancy</div>
+        </div>
+      </div>
+      <div id="homeChatBox" style="background:#FFF8F9;height:160px;overflow-y:auto;padding:12px;display:flex;flex-direction:column">
+        <div class="chat-msg chat-ai" style="color:var(--rose);background:var(--blush);border-color:var(--peach)">Hi Sarah! 🌸 I'm your AI maternity companion. Ask me about symptoms, nutrition, exercises or your baby's development!</div>
+      </div>
+      <div style="padding:8px;background:white;display:flex;gap:6px;overflow-x:auto;border-top:1px solid var(--blush)">
+        <button class="ai-suggestion" onclick="homeAsk('What foods should I eat at week 24?')">🍎 Week 24 Diet</button>
+        <button class="ai-suggestion" onclick="homeAsk('Is my blood pressure normal?')">🩺 BP Check</button>
+        <button class="ai-suggestion" onclick="homeAsk('Baby kick count tips')">🦶 Kick Count</button>
+      </div>
+      <div style="display:flex;padding:8px;border-top:1px solid var(--blush);background:white">
+        <input type="text" id="homeChatInput" placeholder="Ask about your pregnancy..." style="flex:1;border:1px solid var(--peach);border-radius:8px;padding:8px;font-size:13px;font-family:sans-serif;outline:none">
+        <button onclick="sendHomeChat()" style="background:var(--rose);border:none;color:white;border-radius:8px;margin-left:8px;padding:0 12px;cursor:pointer;font-weight:bold">➤</button>
+      </div>
+    </div>
+
+    <div class="sec-hdr"><h3 data-tr="nextAppt">📅 Next Appointment</h3></div>
+    <div style="background:linear-gradient(135deg,var(--rose),#C2185B);border-radius:18px;padding:16px;box-shadow:0 6px 24px rgba(232,84,122,.4);margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="font-size:32px">📋</div>
+        <div style="flex:1">
+          <div style="font-size:10px;color:rgba(255,255,255,.8);font-family:sans-serif;letter-spacing:1.2px;text-transform:uppercase" id="homeApptDate">May 08, 2026</div>
+          <div style="font-size:15px;font-weight:bold;color:#fff;margin-top:2px" id="homeApptDoc">Dr. Aisha Rahman</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.85);font-family:sans-serif" id="homeApptTime">10:00 AM · Antenatal Check-up</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button onclick="openModal('modal-track')" style="background:rgba(255,255,255,.25);border:none;border-radius:10px;padding:8px;font-size:11px;color:#fff;font-family:sans-serif;font-weight:700;cursor:pointer;flex:1" data-tr="track">Track</button>
+        <button style="background:transparent;border:1px solid rgba(255,255,255,.5);border-radius:10px;padding:8px;font-size:11px;color:#fff;font-family:sans-serif;cursor:pointer;flex:1" onclick="openModal('modal-reschedule')" data-tr="resched">Reschedule</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ GRABDOC SCREEN ═══════════════════════════ -->
+<div id="s-doc" class="screen">
+  <div class="hdr hdr-teal">
+    <div class="hdr-label">GrabDoctor</div>
+    <div class="hdr-title">Find Your Doctor 🩺</div>
+    <div class="hdr-sub">Maternal Health Services</div>
+  </div>
+
+  <!-- ── 3 Horizontal Section Buttons (Image 2 layout) ── -->
+  <div style="padding:0 16px 14px;display:flex;gap:8px">
+    <button onclick="scrollToSection('sec-eprescription')" style="flex:1;background:#fff;border:1.5px solid var(--mist);border-radius:12px;padding:10px 6px;font-size:11px;font-family:sans-serif;font-weight:700;color:var(--ink);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:0 1px 6px rgba(0,0,0,.06);transition:all .2s" onmouseover="this.style.borderColor='#EA580C'" onmouseout="this.style.borderColor='var(--mist)'">
+      <span style="font-size:20px">💊</span>
+      <span style="font-size:10px;color:var(--slate)">E-Prescription</span>
+    </button>
+    <button onclick="scrollToSection('sec-aireader')" style="flex:1;background:#fff;border:1.5px solid var(--mist);border-radius:12px;padding:10px 6px;font-size:11px;font-family:sans-serif;font-weight:700;color:var(--ink);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:0 1px 6px rgba(0,0,0,.06);transition:all .2s" onmouseover="this.style.borderColor='#2563EB'" onmouseout="this.style.borderColor='var(--mist)'">
+      <span style="font-size:20px">📄</span>
+      <span style="font-size:10px;color:var(--slate)">AI Report Reader</span>
+    </button>
+    <button onclick="alert('Teleconsultation launching soon! 📹')" style="flex:1;background:#fff;border:1.5px solid var(--mist);border-radius:12px;padding:10px 6px;font-size:11px;font-family:sans-serif;font-weight:700;color:var(--ink);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:0 1px 6px rgba(0,0,0,.06);transition:all .2s" onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--mist)'">
+      <span style="font-size:20px">📹</span>
+      <span style="font-size:10px;color:var(--slate)">Teleconsultation</span>
+    </button>
+  </div>
+
+  <div class="pad">
+
+    <!-- ── SECTION: Nearby Doctors ── -->
+    <div id="sec-doctors" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <h3 style="font-size:15px;font-weight:bold;color:var(--ink)">Nearby Doctors</h3>
+      <button onclick="toggleFilterPanel()" style="background:#F8FAFC;border:1.5px solid var(--mist);border-radius:10px;padding:6px 12px;font-size:12px;font-family:sans-serif;font-weight:600;color:var(--slate);cursor:pointer;display:flex;align-items:center;gap:5px">
+        <span style="font-size:15px">⚙️</span> Filter
+      </button>
+    </div>
+
+    <!-- Search Bar -->
+    <div style="position:relative;margin-bottom:10px">
+      <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:16px">🔍</span>
+      <input type="text" id="docSearch" onkeyup="filterDocs('search')" placeholder="Search doctors, specialties..." style="width:100%;padding:11px 12px 11px 36px;border:1.5px solid var(--mist);border-radius:12px;font-size:13px;font-family:sans-serif;outline:none;background:#F8FAFC">
+    </div>
+
+    <!-- Collapsible Filter Panel -->
+    <div id="filterPanel" style="display:none;background:#fff;border:1.5px solid var(--mist);border-radius:14px;padding:12px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.05)">
+      <!-- Visit Type -->
+      <div style="font-size:10px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">Visit Type</div>
+      <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap">
+        <span class="chip chip-active" id="chip-all" onclick="filterDocs('all')">All</span>
+        <span class="chip chip-default" id="chip-clinic" onclick="filterDocs('clinic')">🏥 In-Clinic</span>
+        <span class="chip chip-default" id="chip-home" onclick="filterDocs('home')">🏠 Home Visit</span>
+        <span class="chip chip-default" id="chip-tele" onclick="filterDocs('tele')">📹 Teleconsult</span>
+      </div>
+      <!-- Dropdowns -->
+      <div style="font-size:10px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">Speciality &amp; Rating</div>
+      <div style="display:flex;gap:6px;margin-bottom:6px">
+        <select class="filter-sel" id="selSpecialist" onchange="filterDocs('spec')">
+          <option value="">All Specialties</option>
+          <option>O&amp;G Specialist</option>
+          <option>Maternal-Fetal Med</option>
+          <option>General Practitioner</option>
+          <option>Midwife</option>
+          <option>Paediatrician</option>
+          <option>Lactation Consultant</option>
+        </select>
+        <select class="filter-sel" id="selRating" onchange="filterDocs('rating')">
+          <option value="">Any Rating</option>
+          <option value="4.9">⭐ 4.9+</option>
+          <option value="4.8">⭐ 4.8+</option>
+          <option value="4.5">⭐ 4.5+</option>
+        </select>
+      </div>
+      <div style="font-size:10px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">Sort By</div>
+      <select class="filter-sel" id="selSort" onchange="filterDocs('sort')" style="width:100%">
+        <option>Rating (Highest First)</option>
+        <option>Price: Low to High</option>
+        <option>Price: High to Low</option>
+        <option>Distance (Nearest)</option>
+      </select>
+    </div>
+
+    <!-- Doctor Cards -->
+    <div id="docList">
+
+      <div class="card doc-card" data-type="home" data-spec="O&G Specialist" data-rating="4.9" data-price="80" style="padding:14px">
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <div style="width:52px;height:52px;border-radius:16px;background:rgba(232,84,122,.13);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;color:var(--rose);flex-shrink:0">AR</div>
+          <div style="flex:1;font-family:sans-serif">
+            <div style="font-size:14px;font-weight:bold;color:var(--ink)">Dr. Aisha Rahman</div>
+            <div style="font-size:11px;color:var(--slate)">O&G Specialist · KPJ Damansara</div>
+            <div style="font-size:11px;color:var(--amber);margin-top:2px">⭐ 4.9 <span style="color:var(--slate)">(312 reviews)</span></div>
+            <div style="display:flex;gap:4px;margin-top:4px;flex-wrap:wrap">
+              <span class="doc-availability" style="background:#D1FAE5;color:#065F46">🏠 Home Visit</span>
+              <span class="doc-availability" style="background:#DBEAFE;color:#1E40AF">🏥 Clinic</span>
+              <span class="doc-availability" style="background:#EDE9FE;color:#5B21B6">📹 Tele</span>
+            </div>
+          </div>
+          <div style="text-align:right;font-family:sans-serif;flex-shrink:0">
+            <div style="font-size:14px;font-weight:bold;color:var(--ink)">RM 80</div>
+            <div style="font-size:9px;color:var(--slate)">per visit</div>
+            <button class="btn-rose" style="margin-top:6px;font-size:11px;padding:6px 14px" onclick="openBooking('Dr. Aisha Rahman','O&G Specialist','RM 80','AR','rose')">Book</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card doc-card" data-type="clinic" data-spec="Maternal-Fetal Med" data-rating="4.8" data-price="95" style="padding:14px">
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <div style="width:52px;height:52px;border-radius:16px;background:rgba(13,148,136,.13);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;color:var(--teal);flex-shrink:0">PN</div>
+          <div style="flex:1;font-family:sans-serif">
+            <div style="font-size:14px;font-weight:bold;color:var(--ink)">Dr. Priya Nair</div>
+            <div style="font-size:11px;color:var(--slate)">Maternal-Fetal Med · SJMC</div>
+            <div style="font-size:11px;color:var(--amber);margin-top:2px">⭐ 4.8 <span style="color:var(--slate)">(198 reviews)</span></div>
+            <div style="display:flex;gap:4px;margin-top:4px">
+              <span class="doc-availability" style="background:#DBEAFE;color:#1E40AF">🏥 Clinic</span>
+              <span class="doc-availability" style="background:#EDE9FE;color:#5B21B6">📹 Tele</span>
+            </div>
+          </div>
+          <div style="text-align:right;font-family:sans-serif;flex-shrink:0">
+            <div style="font-size:14px;font-weight:bold;color:var(--ink)">RM 95</div>
+            <div style="font-size:9px;color:var(--slate)">per visit</div>
+            <button class="btn-rose" style="margin-top:6px;font-size:11px;padding:6px 14px" onclick="openBooking('Dr. Priya Nair','Maternal-Fetal Med','RM 95','PN','teal')">Book</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card doc-card" data-type="home" data-spec="O&G Specialist" data-rating="4.9" data-price="110" style="padding:14px">
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <div style="width:52px;height:52px;border-radius:16px;background:rgba(139,92,246,.13);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;color:#7C3AED;flex-shrink:0">FZ</div>
+          <div style="flex:1;font-family:sans-serif">
+            <div style="font-size:14px;font-weight:bold;color:var(--ink)">Dr. Fatimah Zulkifli</div>
+            <div style="font-size:11px;color:var(--slate)">O&G Specialist · Pantai Hospital</div>
+            <div style="font-size:11px;color:var(--amber);margin-top:2px">⭐ 4.9 <span style="color:var(--slate)">(274 reviews)</span></div>
+            <div style="display:flex;gap:4px;margin-top:4px;flex-wrap:wrap">
+              <span class="doc-availability" style="background:#D1FAE5;color:#065F46">🏠 Home Visit</span>
+              <span class="doc-availability" style="background:#DBEAFE;color:#1E40AF">🏥 Clinic</span>
+            </div>
+          </div>
+          <div style="text-align:right;font-family:sans-serif;flex-shrink:0">
+            <div style="font-size:14px;font-weight:bold;color:var(--ink)">RM 110</div>
+            <div style="font-size:9px;color:var(--slate)">per visit</div>
+            <button class="btn-rose" style="margin-top:6px;font-size:11px;padding:6px 14px" onclick="openBooking('Dr. Fatimah Zulkifli','O&G Specialist','RM 110','FZ','purple')">Book</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card doc-card" data-type="tele" data-spec="General Practitioner" data-rating="4.7" data-price="45" style="padding:14px">
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <div style="width:52px;height:52px;border-radius:16px;background:rgba(34,197,94,.13);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;color:#15803D;flex-shrink:0">NH</div>
+          <div style="flex:1;font-family:sans-serif">
+            <div style="font-size:14px;font-weight:bold;color:var(--ink)">Dr. Nurul Huda</div>
+            <div style="font-size:11px;color:var(--slate)">General Practitioner · Online</div>
+            <div style="font-size:11px;color:var(--amber);margin-top:2px">⭐ 4.7 <span style="color:var(--slate)">(89 reviews)</span></div>
+            <div style="display:flex;gap:4px;margin-top:4px">
+              <span class="doc-availability" style="background:#EDE9FE;color:#5B21B6">📹 Tele Only</span>
+            </div>
+          </div>
+          <div style="text-align:right;font-family:sans-serif;flex-shrink:0">
+            <div style="font-size:14px;font-weight:bold;color:var(--ink)">RM 45</div>
+            <div style="font-size:9px;color:var(--slate)">per session</div>
+            <button class="btn-rose" style="margin-top:6px;font-size:11px;padding:6px 14px" onclick="openBooking('Dr. Nurul Huda','General Practitioner','RM 45','NH','jade')">Book</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card doc-card" data-type="clinic" data-spec="Lactation Consultant" data-rating="4.8" data-price="70" style="padding:14px">
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <div style="width:52px;height:52px;border-radius:16px;background:rgba(245,158,11,.13);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;color:#B45309;flex-shrink:0">KR</div>
+          <div style="flex:1;font-family:sans-serif">
+            <div style="font-size:14px;font-weight:bold;color:var(--ink)">Dr. Kavitha Raj</div>
+            <div style="font-size:11px;color:var(--slate)">Lactation Consultant · Sunway Med</div>
+            <div style="font-size:11px;color:var(--amber);margin-top:2px">⭐ 4.8 <span style="color:var(--slate)">(143 reviews)</span></div>
+            <div style="display:flex;gap:4px;margin-top:4px;flex-wrap:wrap">
+              <span class="doc-availability" style="background:#DBEAFE;color:#1E40AF">🏥 Clinic</span>
+              <span class="doc-availability" style="background:#EDE9FE;color:#5B21B6">📹 Tele</span>
+            </div>
+          </div>
+          <div style="text-align:right;font-family:sans-serif;flex-shrink:0">
+            <div style="font-size:14px;font-weight:bold;color:var(--ink)">RM 70</div>
+            <div style="font-size:9px;color:var(--slate)">per session</div>
+            <button class="btn-rose" style="margin-top:6px;font-size:11px;padding:6px 14px" onclick="openBooking('Dr. Kavitha Raj','Lactation Consultant','RM 70','KR','amber')">Book</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card doc-card" data-type="home" data-spec="Midwife" data-rating="4.6" data-price="60" style="padding:14px">
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <div style="width:52px;height:52px;border-radius:16px;background:rgba(56,189,248,.13);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;color:#0284C7;flex-shrink:0">SN</div>
+          <div style="flex:1;font-family:sans-serif">
+            <div style="font-size:14px;font-weight:bold;color:var(--ink)">Mdm. Suraya Nordin</div>
+            <div style="font-size:11px;color:var(--slate)">Certified Midwife · Home Visit</div>
+            <div style="font-size:11px;color:var(--amber);margin-top:2px">⭐ 4.6 <span style="color:var(--slate)">(67 reviews)</span></div>
+            <div style="display:flex;gap:4px;margin-top:4px">
+              <span class="doc-availability" style="background:#D1FAE5;color:#065F46">🏠 Home Only</span>
+            </div>
+          </div>
+          <div style="text-align:right;font-family:sans-serif;flex-shrink:0">
+            <div style="font-size:14px;font-weight:bold;color:var(--ink)">RM 60</div>
+            <div style="font-size:9px;color:var(--slate)">per visit</div>
+            <button class="btn-rose" style="margin-top:6px;font-size:11px;padding:6px 14px" onclick="openBooking('Mdm. Suraya Nordin','Midwife','RM 60','SN','sky')">Book</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end #docList -->
+
+    <!-- ── SECTION: E-Prescription & Delivery ── -->
+    <div id="sec-eprescription" class="sec-hdr" style="margin-top:20px"><h3 data-tr="medTitle">💊 E-Prescription &amp; Delivery</h3></div>
+    <div class="card" style="background:linear-gradient(135deg,#FFF7ED,#FED7AA);border:1px solid rgba(253,186,116,.4)">
+      <div style="display:flex;justify-content:space-between;border-bottom:1px solid rgba(146,64,14,.2);padding-bottom:8px;margin-bottom:8px">
+        <div style="font-family:sans-serif">
+          <div style="font-size:13px;font-weight:bold;color:#7C2D12">Prescription — Dr. Aisha</div>
+          <div style="font-size:10px;color:#9A3412">Issued: Today · Valid 30 days</div>
+        </div>
+        <span class="badge" style="background:#FEF3C7;color:#92400E">Valid</span>
+      </div>
+      <ul style="font-size:11px;font-family:sans-serif;color:#7C2D12;margin-left:16px;margin-bottom:12px;line-height:1.8">
+        <li>Obimin Pluz — 1 tab daily (Prenatal Vitamins)</li>
+        <li>Calcium Carbonate 600mg — 1 tab twice daily</li>
+        <li>Ferrous Fumarate 200mg — 1 tab daily (Iron)</li>
+      </ul>
+      <button class="btn-teal" style="background:#EA580C;border-radius:8px" onclick="openDelivModal()" data-tr="orderBtn">🛵 Order Delivery (RM 45)</button>
+    </div>
+
+    <!-- ── SECTION: AI Report Reader ── -->
+    <div id="sec-aireader" class="sec-hdr" style="margin-top:20px"><h3 data-tr="aiReader">📄 AI Report Reader</h3></div>
+    <div class="card" style="background:#F8FAFC;border:1px dashed var(--slate)">
+      <div style="background:linear-gradient(135deg,#EFF6FF,#DBEAFE);border-radius:12px;padding:12px;margin-bottom:12px;border:1px solid #BFDBFE">
+        <div style="font-size:12px;font-weight:bold;color:#1D4ED8;font-family:sans-serif;margin-bottom:4px">📋 Sample Report Available</div>
+        <div style="font-size:10px;color:#3B82F6;font-family:sans-serif;margin-bottom:8px">Try analyzing this sample blood test report</div>
+        <button onclick="loadSampleReport()" style="background:#2563EB;border:none;color:white;border-radius:8px;padding:7px 14px;font-size:11px;font-family:sans-serif;font-weight:700;cursor:pointer">📥 Load Sample PDF Report</button>
+      </div>
+      <div style="text-align:center;margin-bottom:12px">
+        <input type="file" id="reportInput" accept=".pdf" style="display:none" onchange="handlePDFUpload()">
+        <button class="btn-outline" onclick="document.getElementById('reportInput').click()" data-tr="uploadBtn" style="color:var(--slate);border-color:var(--slate)">+ Upload New PDF Report</button>
+      </div>
+      <div style="font-size:12px;font-weight:bold;margin-bottom:8px;color:var(--ink);font-family:sans-serif" data-tr="hist">History:</div>
+      <ul id="reportHistory" style="list-style:none;font-size:11px;font-family:sans-serif;color:var(--slate);display:flex;flex-direction:column;gap:8px">
+        <li style="background:var(--white);padding:8px;border-radius:6px;border:1px solid var(--blush);cursor:pointer" onclick="showSavedReport('Blood_Test_April.pdf')">📄 Blood_Test_April.pdf (Analyzed) <span style="float:right;color:var(--jade)">✅</span></li>
+      </ul>
+      <div id="pdfResult" style="display:none;margin-top:12px;background:white;border-radius:8px;padding:12px;font-size:11px;font-family:sans-serif;border:1px solid var(--jade);color:var(--ink)">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <span style="font-size:18px">📄</span>
+          <strong id="pdfFileName" style="font-size:13px">Scan.pdf</strong>
+        </div>
+        <div style="background:linear-gradient(135deg,#F0FDF4,#DCFCE7);border-radius:8px;padding:10px;border:1px solid #BBF7D0;margin-bottom:8px">
+          <div style="color:#15803D;font-weight:bold;font-size:12px;margin-bottom:6px">🤖 AI Analysis Summary</div>
+          <div id="pdfAnalysis">Tap "Load Sample" or upload a PDF to analyze.</div>
+        </div>
+        <button class="btn-outline" style="font-size:11px;padding:7px" onclick="document.getElementById('pdfResult').style.display='none'">Close Analysis</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════ IBU SIHAT SCREEN ═══════════════════════════ -->
+<div id="s-ibu" class="screen">
+  <div class="hdr hdr-rose">
+    <div class="hdr-label">Ibu Sihat</div>
+    <div class="hdr-title">Maternity Journey 🤰</div>
+    <div class="hdr-sub">Week 24 — Second Trimester</div>
+  </div>
+  <div class="pad">
+
+    <!-- ── Pregnancy Progress Bar ── -->
+    <div class="card" style="padding:14px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-family:sans-serif">
+        <div style="font-size:13px;font-weight:bold;color:var(--ink)">🗓 Pregnancy Progress</div>
+        <div style="font-size:11px;color:var(--slate)">Week 24 of 40</div>
+      </div>
+      <div style="background:var(--blush);border-radius:20px;height:12px;overflow:hidden">
+        <div style="background:linear-gradient(90deg,var(--rose),var(--rose-soft));width:60%;height:100%;border-radius:20px;transition:width .8s ease"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:9px;font-family:sans-serif;color:var(--slate);margin-top:5px">
+        <span>1st Tri (Wk 1–13)</span><span style="color:var(--rose);font-weight:700">2nd Tri ← Now</span><span>3rd Tri (Wk 28–40)</span>
+      </div>
+      <div style="margin-top:10px;display:flex;justify-content:space-around;text-align:center;font-family:sans-serif">
+        <div><div style="font-size:18px;font-weight:bold;color:var(--rose)">16</div><div style="font-size:9px;color:var(--slate)">Weeks Left</div></div>
+        <div><div style="font-size:18px;font-weight:bold;color:var(--rose)">60%</div><div style="font-size:9px;color:var(--slate)">Complete</div></div>
+        <div><div style="font-size:18px;font-weight:bold;color:var(--rose)">Aug 21</div><div style="font-size:9px;color:var(--slate)">Est. Due Date</div></div>
+      </div>
+    </div>
+
+    <!-- ── Baby Development ── -->
+    <div class="sec-hdr"><h3>👶 Baby at Week 24</h3></div>
+    <div class="card" style="background:linear-gradient(135deg,#FFF1F2,#FFE4EC);border-color:var(--peach)">
+      <div style="display:flex;gap:14px;align-items:flex-start">
+        <div style="font-size:48px;line-height:1">🌽</div>
+        <div style="font-family:sans-serif;flex:1">
+          <div style="font-size:13px;font-weight:bold;color:var(--rose);margin-bottom:6px">Size of a Corn Cob</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+            <span class="badge" style="background:var(--blush);color:var(--rose)">~30 cm</span>
+            <span class="badge" style="background:var(--blush);color:var(--rose)">~600 g</span>
+          </div>
+          <div style="font-size:11px;color:var(--ink);line-height:1.7">
+            ✅ Lungs forming surfactant<br>
+            ✅ Fingerprints fully formed<br>
+            ✅ Reacts to sounds & light<br>
+            ✅ Face looks fully formed<br>
+            ✅ Active sleep-wake cycles
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Interactive Kick Counter ── -->
+    <div class="sec-hdr"><h3>🦶 Baby Kick Counter</h3></div>
+    <div class="card" style="text-align:center;font-family:sans-serif">
+      <div style="font-size:11px;color:var(--slate);margin-bottom:12px">Tap the button each time you feel a kick. Target: 10 kicks in 2 hours.</div>
+      <div style="position:relative;display:inline-block">
+        <div id="kickCount" style="font-size:52px;font-weight:bold;color:var(--rose);line-height:1">0</div>
+        <div style="font-size:11px;color:var(--slate)">kicks recorded</div>
+      </div>
+      <div id="kickStatus" style="font-size:11px;color:var(--slate);margin:8px 0;min-height:18px"></div>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button onclick="recordKick()" style="flex:2;background:linear-gradient(135deg,var(--rose),var(--rose-soft));border:none;border-radius:14px;padding:16px;font-size:22px;cursor:pointer;box-shadow:0 4px 12px rgba(232,84,122,.4);active:transform:scale(.97)">🦶 Kick!</button>
+        <button onclick="resetKicks()" style="flex:1;background:var(--mist);border:none;border-radius:14px;padding:16px;font-size:13px;font-family:sans-serif;color:var(--slate);cursor:pointer">Reset</button>
+      </div>
+      <div id="kickTimerDisplay" style="font-size:10px;color:var(--slate);margin-top:8px"></div>
+    </div>
+
+    <!-- ── Trimester Guide ── -->
+    <div class="sec-hdr"><h3>📋 Trimester Checklist</h3></div>
+
+    <!-- 1st Trimester (Done) -->
+    <div class="card" style="padding:12px;border-left:4px solid var(--jade);opacity:.75">
+      <div style="display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-family:sans-serif" onclick="toggleSection('tri1')">
+        <div>
+          <div style="font-size:13px;font-weight:bold;color:#15803D">✅ 1st Trimester</div>
+          <div style="font-size:10px;color:var(--slate)">Weeks 1–13 · Completed</div>
+        </div>
+        <span id="tri1arrow" style="font-size:16px;color:var(--slate)">▾</span>
+      </div>
+      <div id="tri1" style="display:none;margin-top:10px">
+        <ul style="font-size:11px;font-family:sans-serif;color:var(--ink);margin-left:14px;line-height:1.8">
+          <li>✅ First prenatal booking appointment</li>
+          <li>✅ Blood tests (FBC, blood group, rubella)</li>
+          <li>✅ Dating scan (Week 11–13)</li>
+          <li>✅ Started folic acid + prenatal vitamins</li>
+          <li>✅ Nuchal translucency (Down syndrome) screen</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 2nd Trimester (Current) -->
+    <div class="card" style="padding:12px;border-left:4px solid var(--rose)">
+      <div style="display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-family:sans-serif" onclick="toggleSection('tri2')">
+        <div>
+          <div style="font-size:13px;font-weight:bold;color:var(--rose)">⏳ 2nd Trimester <span class="badge" style="background:var(--rose);color:white">Current</span></div>
+          <div style="font-size:10px;color:var(--slate)">Weeks 14–27 · In Progress</div>
+        </div>
+        <span id="tri2arrow" style="font-size:16px;color:var(--rose)">▾</span>
+      </div>
+      <div id="tri2" style="display:block;margin-top:10px">
+        <ul style="font-size:11px;font-family:sans-serif;color:var(--ink);margin-left:14px;line-height:1.8">
+          <li>✅ <strong>Week 20:</strong> Detailed Anomaly Scan — Completed</li>
+          <li>⏳ <strong>Week 24–28:</strong> MGTT Glucose Test (Due soon!)</li>
+          <li>🔲 <strong>Week 26:</strong> Anti-D injection (if Rh-negative)</li>
+          <li>🔲 <strong>Week 28:</strong> Begin daily kick counting log</li>
+          <li>🔲 <strong>Week 28:</strong> Growth & wellbeing scan</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 3rd Trimester (Upcoming) -->
+    <div class="card" style="padding:12px;border-left:4px solid var(--sky);opacity:.8">
+      <div style="display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-family:sans-serif" onclick="toggleSection('tri3')">
+        <div>
+          <div style="font-size:13px;font-weight:bold;color:#0369A1">🔜 3rd Trimester</div>
+          <div style="font-size:10px;color:var(--slate)">Weeks 28–40 · Upcoming</div>
+        </div>
+        <span id="tri3arrow" style="font-size:16px;color:var(--slate)">▾</span>
+      </div>
+      <div id="tri3" style="display:none;margin-top:10px">
+        <ul style="font-size:11px;font-family:sans-serif;color:var(--ink);margin-left:14px;line-height:1.8">
+          <li>🔲 <strong>Week 32:</strong> Growth scan & Group B Strep test</li>
+          <li>🔲 <strong>Week 34:</strong> Whooping cough (Tdap) vaccine</li>
+          <li>🔲 <strong>Week 36:</strong> Birth plan discussion with Dr. Aisha</li>
+          <li>🔲 <strong>Week 37–40:</strong> Weekly check-ups</li>
+          <li>🔲 Prepare hospital bag & baby essentials</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ── Safe Exercises ── -->
+    <div class="sec-hdr"><h3>🧘 Safe Exercises — Week 24</h3></div>
+    <div class="grid2">
+      <div class="card" style="padding:12px;text-align:center;font-family:sans-serif">
+        <div style="font-size:28px;margin-bottom:4px">🚶‍♀️</div>
+        <div style="font-size:12px;font-weight:bold;color:var(--ink)">Brisk Walking</div>
+        <div style="font-size:10px;color:var(--slate)">30 min / day</div>
+        <span class="vital-range range-normal" style="margin-top:6px">Recommended</span>
+      </div>
+      <div class="card" style="padding:12px;text-align:center;font-family:sans-serif">
+        <div style="font-size:28px;margin-bottom:4px">🏊‍♀️</div>
+        <div style="font-size:12px;font-weight:bold;color:var(--ink)">Swimming</div>
+        <div style="font-size:10px;color:var(--slate)">3× per week</div>
+        <span class="vital-range range-normal" style="margin-top:6px">Recommended</span>
+      </div>
+      <div class="card" style="padding:12px;text-align:center;font-family:sans-serif">
+        <div style="font-size:28px;margin-bottom:4px">🧘</div>
+        <div style="font-size:12px;font-weight:bold;color:var(--ink)">Prenatal Yoga</div>
+        <div style="font-size:10px;color:var(--slate)">2× per week</div>
+        <span class="vital-range range-normal" style="margin-top:6px">Recommended</span>
+      </div>
+      <div class="card" style="padding:12px;text-align:center;font-family:sans-serif">
+        <div style="font-size:28px;margin-bottom:4px">🚴‍♀️</div>
+        <div style="font-size:12px;font-weight:bold;color:var(--ink)">Stationary Bike</div>
+        <div style="font-size:10px;color:var(--slate)">20 min low-intensity</div>
+        <span class="vital-range range-low" style="margin-top:6px">Use with care</span>
+      </div>
+    </div>
+
+    <!-- ── Common Symptoms ── -->
+    <div class="sec-hdr"><h3>💊 Common Symptoms at Week 24</h3></div>
+    <div class="card" style="font-family:sans-serif">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:#F0FDF4;border-radius:8px;border:1px solid #BBF7D0">
+          <div>
+            <div style="font-size:12px;font-weight:bold;color:#15803D">Back Pain</div>
+            <div style="font-size:10px;color:var(--slate)">Use supportive pillow, gentle stretches</div>
+          </div>
+          <span style="font-size:16px">😌</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:#FFF7ED;border-radius:8px;border:1px solid #FED7AA">
+          <div>
+            <div style="font-size:12px;font-weight:bold;color:#92400E">Round Ligament Pain</div>
+            <div style="font-size:10px;color:var(--slate)">Sharp flank pain when changing positions — normal</div>
+          </div>
+          <span style="font-size:16px">⚠️</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:#F0FDF4;border-radius:8px;border:1px solid #BBF7D0">
+          <div>
+            <div style="font-size:12px;font-weight:bold;color:#15803D">Braxton Hicks</div>
+            <div style="font-size:10px;color:var(--slate)">Mild tightenings — practice contractions, normal</div>
+          </div>
+          <span style="font-size:16px">😌</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:#FEF2F2;border-radius:8px;border:1px solid #FECACA">
+          <div>
+            <div style="font-size:12px;font-weight:bold;color:#991B1B">Sudden Swelling / Severe Headache</div>
+            <div style="font-size:10px;color:var(--slate)">May signal preeclampsia — contact Dr. Aisha immediately</div>
+          </div>
+          <span style="font-size:16px">🚨</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════ MEALS SCREEN ═══════════════════════════ -->
+<div id="s-meals" class="screen">
+  <div class="hdr hdr-jade" style="background:linear-gradient(160deg,#16A34A,#4ADE80)">
+    <div class="hdr-label" data-tr="mealHdrLabel">MEALS</div>
+<div class="hdr-title" data-tr="mealTitle">Meal Plan 🍱</div>
+    <div class="hdr-sub" id="mealDate">Rabu, 07 Mei 2026</div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="meal-tabs">
+    <div class="meal-tab active" id="tab-harini" data-tr="mealToday" 
+    onclick="switchMealTab('harini')">Today</div>
+
+    <div class="meal-tab" id="tab-rancangan" data-tr="mealPlan"
+    onclick="switchMealTab('rancangan')">Meal Plan</div>
+
+    <div class="meal-tab" id="tab-pantang" data-tr="mealPantang"
+    onclick="switchMealTab('pantang')">Modern Confinement</div>
+  </div>
+
+  <!-- ── TAB: Hari Ini ── -->
+  <div id="meal-harini" class="pad">
+
+    <!-- Calorie Summary Card -->
+    <div class="card" style="background:#FAFFFE;border-color:#BBF7D0">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-family:sans-serif">
+        <div style="font-size:14px;font-weight:bold;color:#15803D" data-tr="calorieSummary">Ringkasan Kalori</div>
+        <div style="font-size:12px;color:var(--slate)"><span id="mCalEaten">1,640</span> / 2,200 kcal</div>
+      </div>
+
+      <div style="display:flex;gap:16px;align-items:center">
+        <!-- Donut Chart SVG -->
+        <div style="position:relative;flex-shrink:0">
+          <svg viewBox="0 0 100 100" width="90" height="90">
+            <circle cx="50" cy="50" r="38" fill="none" stroke="#F1F5F9" stroke-width="14"/>
+            <!-- Karbohidrat 38% -->
+            <circle cx="50" cy="50" r="38" fill="none" stroke="#22C55E" stroke-width="14"
+              stroke-dasharray="90.6 238.8" stroke-dashoffset="0" transform="rotate(-90 50 50)"/>
+            <!-- Protein 26% -->
+            <circle cx="50" cy="50" r="38" fill="none" stroke="#E8547A" stroke-width="14"
+              stroke-dasharray="62.1 238.8" stroke-dashoffset="-90.6" transform="rotate(-90 50 50)"/>
+            <!-- Lemak 19% -->
+            <circle cx="50" cy="50" r="38" fill="none" stroke="#3B82F6" stroke-width="14"
+              stroke-dasharray="45.4 238.8" stroke-dashoffset="-152.7" transform="rotate(-90 50 50)"/>
+            <!-- Serat 17% -->
+            <circle cx="50" cy="50" r="38" fill="none" stroke="#F59E0B" stroke-width="14"
+              stroke-dasharray="40.6 238.8" stroke-dashoffset="-198.1" transform="rotate(-90 50 50)"/>
+          </svg>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:bold;color:#15803D;font-family:sans-serif" id="mCalPct">75%</div>
+        </div>
+
+        <!-- Macro Legend -->
+        <div style="flex:1;font-family:sans-serif;display:flex;flex-direction:column;gap:5px">
+          <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--ink)">
+            <span style="width:10px;height:10px;border-radius:50%;background:#22C55E;flex-shrink:0"></span><span data-tr="macroCarbs">Karbohidrat 38%</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--ink)">
+            <span style="width:10px;height:10px;border-radius:50%;background:#E8547A;flex-shrink:0"></span><span data-tr="macroProtein">Protein 26%</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--ink)">
+            <span style="width:10px;height:10px;border-radius:50%;background:#3B82F6;flex-shrink:0"></span><span data-tr="macroFat">Lemak 19%</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--ink)">
+            <span style="width:10px;height:10px;border-radius:50%;background:#F59E0B;flex-shrink:0"></span><span data-tr="macroFiber">Serat 17%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nutrient Grid -->
+      <div class="grid2" style="margin-top:12px;gap:8px">
+        <div style="background:#F0FDF4;border-radius:12px;padding:10px;text-align:center;border:1px solid #BBF7D0">
+          <div style="font-size:18px;font-weight:bold;color:#15803D;font-family:sans-serif">62g</div>
+          <div style="font-size:10px;color:var(--slate);font-family:sans-serif">Protein</div>
+        </div>
+        <div style="background:#FFF1F2;border-radius:12px;padding:10px;text-align:center;border:1px solid var(--peach)">
+          <div style="font-size:18px;font-weight:bold;color:var(--rose);font-family:sans-serif">890mg</div>
+          <div style="font-size:10px;color:var(--slate);font-family:sans-serif" data-tr="labelCalcium">Kalsium</div>
+        </div>
+        <div style="background:#FFF7ED;border-radius:12px;padding:10px;text-align:center;border:1px solid #FCD34D">
+          <div style="font-size:18px;font-weight:bold;color:#92400E;font-family:sans-serif">18mg</div>
+          <div style="font-size:10px;color:var(--slate);font-family:sans-serif" data-tr="labelIron">Zat Besi</div>
+        </div>
+        <div style="background:#FFFBEB;border-radius:12px;padding:10px;text-align:center;border:1px solid #FDE68A">
+          <div style="font-size:18px;font-weight:bold;color:#B45309;font-family:sans-serif">480mcg</div>
+          <div style="font-size:10px;color:var(--slate);font-family:sans-serif" data-tr="labelFolicAcid">Asid Folik</div>
+        </div>
+      </div>
+
+      <!-- Water Tracker -->
+      <div style="margin-top:12px;font-family:sans-serif">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <span style="font-size:11px;font-weight:600;color:var(--slate)" data-tr="waterLabel">💧 Air Minum</span>
+          <div style="display:flex;gap:4px;align-items:center">
+            <button onclick="adjustWater(-1)" style="background:#DBEAFE;border:none;border-radius:6px;padding:1px 8px;font-size:14px;cursor:pointer;color:#1D4ED8;font-weight:bold">−</button>
+            <span id="waterDisplay" style="font-size:11px;font-weight:bold;color:#1D4ED8;min-width:60px;text-align:center">1.5 / 2.5 L</span>
+            <button onclick="adjustWater(1)" style="background:#DBEAFE;border:none;border-radius:6px;padding:1px 8px;font-size:14px;cursor:pointer;color:#1D4ED8;font-weight:bold">+</button>
+          </div>
+        </div>
+        <div style="display:flex;gap:3px" id="waterGlasses"></div>
+        <div style="font-size:9px;color:var(--slate);margin-top:3px" data-tr="waterHint">Setiap gelas = 250ml · Sasaran: 10 gelas (2.5L)</div>
+      </div>
+    </div>
+
+    <!-- Meal Log Header -->
+    <div style="display:flex;justify-content:space-between;align-items:center;margin:4px 0 10px">
+      <div style="font-size:15px;font-weight:bold;color:var(--ink)" data-tr="mealLogToday">Log Makanan Hari Ini</div>
+      <button onclick="openModal('modal-addmeal')" style="background:linear-gradient(135deg,var(--rose),var(--rose-soft));border:none;border-radius:10px;padding:6px 14px;font-size:11px;color:#fff;font-family:sans-serif;font-weight:700;cursor:pointer" data-tr="addMealBtn">+ Tambah</button>
+    </div>
+
+    <!-- SARAPAN -->
+    <div class="meal-section">
+      <div class="meal-section-hdr">
+        <span style="font-size:18px">☀️</span>
+        <div>
+          <div style="font-size:12px;font-weight:bold;color:#15803D;font-family:sans-serif" data-tr="breakfastLbl">SARAPAN</div>
+          <div style="font-size:10px;color:var(--slate);font-family:sans-serif">7:30 AM · 570 kcal</div>
+        </div>
+      </div>
+      <div class="food-item">
+        <div style="display:flex;align-items:center;gap:10px;flex:1">
+          <div class="food-emoji" style="background:#FFF7ED">🍚</div>
+          <div style="font-family:sans-serif">
+            <div style="font-size:12px;font-weight:600;color:var(--ink)">Nasi Lemak (separuh pinggan)</div>
+            <div style="font-size:10px;color:var(--slate)">320 kcal · <span data-tr="nutriCarbs">Karbohidrat</span> 42g</div>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--slate);font-family:sans-serif;white-space:nowrap" data-tr="servServing">1 hidangan</div>
+      </div>
+      <div class="food-item">
+        <div style="display:flex;align-items:center;gap:10px;flex:1">
+          <div class="food-emoji" style="background:#FFF1F2">🥚</div>
+          <div style="font-family:sans-serif">
+            <div style="font-size:12px;font-weight:600;color:var(--ink)">Telur separuh masak</div>
+            <div style="font-size:10px;color:var(--slate)">70 kcal · Protein 6g</div>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--slate);font-family:sans-serif;white-space:nowrap" data-tr="servEgg">2 biji</div>
+      </div>
+      <div class="food-item">
+        <div style="display:flex;align-items:center;gap:10px;flex:1">
+          <div class="food-emoji" style="background:#EFF6FF">🥛</div>
+          <div style="font-family:sans-serif">
+            <div style="font-size:12px;font-weight:600;color:var(--ink)">Susu ibu mengandung</div>
+            <div style="font-size:10px;color:var(--slate)">180 kcal · <span data-tr="labelCalcium">Kalsium</span> 400mg</div>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--slate);font-family:sans-serif;white-space:nowrap" data-tr="servGlass">1 gelas</div>
+      </div>
+    </div>
+
+    <!-- MAKAN TENGAH HARI -->
+    <div class="meal-section">
+      <div class="meal-section-hdr">
+        <span style="font-size:18px">🌤</span>
+        <div>
+          <div style="font-size:12px;font-weight:bold;color:#B45309;font-family:sans-serif" data-tr="lunchLbl">MAKAN TENGAH HARI</div>
+          <div style="font-size:10px;color:var(--slate);font-family:sans-serif">12:45 PM · 605 kcal</div>
+        </div>
+      </div>
+      <div class="food-item">
+        <div style="display:flex;align-items:center;gap:10px;flex:1">
+          <div class="food-emoji" style="background:#FFF1F2">🍗</div>
+          <div style="font-family:sans-serif">
+            <div style="font-size:12px;font-weight:600;color:var(--ink)">Ayam masak merah</div>
+            <div style="font-size:10px;color:var(--slate)">280 kcal · Protein 28g</div>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--slate);font-family:sans-serif;white-space:nowrap" data-tr="servPiece">1 potong</div>
+      </div>
+      <div class="food-item">
+        <div style="display:flex;align-items:center;gap:10px;flex:1">
+          <div class="food-emoji" style="background:#F0FDF4">🥬</div>
+          <div style="font-family:sans-serif">
+            <div style="font-size:12px;font-weight:600;color:var(--ink)">Sayur campur tumis</div>
+            <div style="font-size:10px;color:var(--slate)">85 kcal · <span data-tr="macroFiber2">Serat</span> 4g</div>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--slate);font-family:sans-serif;white-space:nowrap" data-tr="servBowl">1 mangkuk</div>
+      </div>
+      <div class="food-item">
+        <div style="display:flex;align-items:center;gap:10px;flex:1">
+          <div class="food-emoji" style="background:#FAFAFA">🍚</div>
+          <div style="font-family:sans-serif">
+            <div style="font-size:12px;font-weight:600;color:var(--ink)">Nasi putih</div>
+            <div style="font-size:10px;color:var(--slate)">240 kcal · <span data-tr="nutriCarbs">Karbohidrat</span> 52g</div>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--slate);font-family:sans-serif;white-space:nowrap" data-tr="servPlate">1 pinggan</div>
+      </div>
+    </div>
+
+    <!-- AI Cadangan -->
+    <div style="background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border-radius:14px;padding:12px 14px;margin-bottom:12px;border:1px solid #FCD34D">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+        <span style="font-size:14px">⚡</span>
+        <div style="font-size:11px;font-weight:bold;color:#92400E;font-family:sans-serif" data-tr="aiNutrTitle">CADANGAN AI PEMAKANAN</div>
+      </div>
+      <div style="font-size:11px;color:#78350F;font-family:sans-serif;line-height:1.6" data-tr-html="aiNutrBody">
+        Anda masih perlu <strong>560 kcal</strong> lagi untuk hari ini. Cadangkan tambah <strong>zat besi</strong> (bayam/hati ayam) di makan malam — tahap semasa 18mg, sasaran 27mg/hari untuk trimester 3. Minum <strong>1–2 gelas air</strong> lagi sebelum tidur.
+      </div>
+    </div>
+
+    <!-- Log Dinner/Snack CTA -->
+    <button onclick="openModal('modal-addmeal')" style="width:100%;background:linear-gradient(135deg,#16A34A,#4ADE80);border:none;border-radius:14px;padding:14px;font-size:13px;font-family:sans-serif;font-weight:700;color:#fff;cursor:pointer;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px">
+      <span style="font-size:18px">🌙</span> <span data-tr="logDinnerBtn">+ Log Makanan Malam / Snek</span>
+    </button>
+
+    <!-- Foods to Avoid -->
+    <div class="card" style="background:#FEF2F2;border-color:#FECACA;font-family:sans-serif">
+      <div style="font-size:13px;font-weight:bold;color:#991B1B;margin-bottom:8px" data-tr="avoidTitle">🚫 Makanan Pantang (Minggu 24)</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        <span class="badge" style="background:#FEE2E2;color:#991B1B" data-tr="avoidRawSushi">Sushi mentah</span>
+        <span class="badge" style="background:#FEE2E2;color:#991B1B" data-tr="avoidCheese">Keju tidak pasteur</span>
+        <span class="badge" style="background:#FEE2E2;color:#991B1B" data-tr="avoidFish">Ikan merkuri tinggi</span>
+        <span class="badge" style="background:#FEE2E2;color:#991B1B" data-tr="avoidDeli">Daging deli</span>
+        <span class="badge" style="background:#FEE2E2;color:#991B1B" data-tr="avoidCaffeine">Kafein berlebihan</span>
+        <span class="badge" style="background:#FEE2E2;color:#991B1B" data-tr="avoidAlcohol">Alkohol</span>
+      </div>
+    </div>
+
+  </div><!-- /meal-harini -->
+
+  <!-- ── TAB: Rancangan Makan ── -->
+  <div id="meal-rancangan" class="pad" style="display:none">
+    <div class="card" style="text-align:center;padding:32px 20px;font-family:sans-serif">
+      <div style="font-size:40px;margin-bottom:12px">🗓</div>
+      <div style="font-size:15px;font-weight:bold;color:var(--ink);margin-bottom:6px" data-tr="weeklyPlanTitle">Rancangan Makan Mingguan</div>
+      <div style="font-size:12px;color:var(--slate);margin-bottom:20px" data-tr="weeklyPlanSub">Pelan makan 7 hari yang disesuaikan untuk trimester kedua anda.</div>
+      <button class="btn-rose" style="width:auto;padding:10px 24px" onclick="alert('Generating your personalised 7-day plan... 🌿')" data-tr="genPlanBtn">Jana Pelan Saya</button>
+    </div>
+    <div class="card" style="font-family:sans-serif;background:linear-gradient(135deg,#F0FDF4,#DCFCE7);border-color:#BBF7D0">
+      <div style="font-size:13px;font-weight:bold;color:#15803D;margin-bottom:8px" data-tr="nutriTipsTitle">💡 Tips Pemakanan Trimester 2</div>
+      <ul style="font-size:11px;color:#166534;line-height:1.8;margin-left:14px">
+        <li>Tambah 340–450 kalori berbanding sebelum hamil</li>
+        <li>Makan 5–6 hidangan kecil setiap hari</li>
+        <li>Utamakan protein, zat besi dan kalsium</li>
+        <li>Omega-3 DHA penting untuk otak bayi</li>
+        <li>Kurangkan makanan berproses dan bergula</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── TAB: Pantang Moden ── -->
+  <div id="meal-pantang" class="pad" style="display:none">
+    <div style="background:linear-gradient(135deg,#FFF1F2,#FFE4EC);border-radius:16px;padding:14px;margin-bottom:12px;border:1px solid var(--peach);font-family:sans-serif">
+      <div style="font-size:14px;font-weight:bold;color:var(--rose);margin-bottom:4px" data-tr="pantangTitle">🌺 Pantang Moden: Panduan Ibu</div>
+      <div style="font-size:11px;color:var(--ink);line-height:1.6" data-tr="pantangSub">Panduan berasaskan bukti saintifik yang menggabungkan tradisi Melayu dengan penjagaan moden.</div>
+    </div>
+    <div class="card" style="font-family:sans-serif">
+      <div style="font-size:13px;font-weight:bold;color:var(--rose);margin-bottom:10px" data-tr="pantangEatTitle">✅ Makanan Digalakkan</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="font-size:20px">🐟</span>
+          <div><div style="font-size:12px;font-weight:600;color:var(--ink)" data-tr="pantangFish">Ikan haruan & ikan keli</div><div style="font-size:10px;color:var(--slate)" data-tr="pantangFishSub">Membantu proses penyembuhan, kaya protein</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="font-size:20px">🫚</span>
+          <div><div style="font-size:12px;font-weight:600;color:var(--ink)" data-tr="pantangGinger">Halia & kunyit</div><div style="font-size:10px;color:var(--slate)" data-tr="pantangGingerSub">Anti-radang semula jadi, melancarkan peredaran darah</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="font-size:20px">🥬</span>
+          <div><div style="font-size:12px;font-weight:600;color:var(--ink)" data-tr="pantangVeg">Sayur bayam & kangkung</div><div style="font-size:10px;color:var(--slate)" data-tr="pantangVegSub">Kaya zat besi & folat, baik untuk pemulihan</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="font-family:sans-serif;background:#FEF2F2;border-color:#FECACA">
+      <div style="font-size:13px;font-weight:bold;color:#991B1B;margin-bottom:10px" data-tr="pantangAvoidTitle">🚫 Elakkan Semasa Berpantang</div>
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:11px;color:#7F1D1D;line-height:1.6">
+        <div data-tr="pantangAvoid1">❌ Makanan sejuk atau ais berlebihan</div>
+        <div data-tr="pantangAvoid2">❌ Makanan masam berlebihan (cuka, asam)</div>
+        <div data-tr="pantangAvoid3">❌ Seafood seperti udang & sotong (trimester awal)</div>
+        <div data-tr="pantangAvoid4">❌ Makanan pedas berlebihan</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════ PROFILE SCREEN ═══════════════════════════ -->
+<div id="s-profile" class="screen">
+  <div class="hdr hdr-blue">
+    <div style="display:flex;align-items:center;gap:16px">
+      <div class="prof-pic-wrap" onclick="triggerPicUpload()">
+        <input type="file" id="picInput" accept="image/*" style="display:none" onchange="changePic()">
+        <div id="profPicCircle" style="width:60px;height:60px;border-radius:50%;background:white;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:bold;color:#3B82F6;overflow:hidden">
+          <span id="profPicInitials">SL</span>
+          <img id="profPicImg" src="" style="width:100%;height:100%;object-fit:cover;display:none;border-radius:50%">
+        </div>
+        <div class="edit-overlay">✏️</div>
+      </div>
+      <div style="flex:1;font-family:sans-serif">
+        <div style="font-size:20px;font-weight:bold;color:white" id="profName">Sarah Lee</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.9)" id="profPhone">+60 12-345 6789</div>
+      </div>
+      <button onclick="openModal('modal-edit')" style="background:rgba(255,255,255,0.2);border:none;color:white;padding:6px 12px;border-radius:8px;font-size:12px;font-family:sans-serif;display:flex;align-items:center;gap:4px" data-tr="edit">
+        <i class="ti ti-pencil"></i> Edit
+      </button>
+    </div>
+  </div>
+
+  <div class="pad">
+    <div class="card" style="padding:0;overflow:hidden;font-family:sans-serif">
+      
+      <!-- Language -->
+      <div style="padding:16px;border-bottom:1px solid var(--mist);display:flex;justify-content:space-between;align-items:center">
+        <div style="display:flex;align-items:center;gap:12px;color:var(--ink)">
+          <div class="prof-icon" style="background:#EFF6FF">🌐</div>
+          <span style="font-size:14px;font-weight:500" data-tr="lang">App Language</span>
+        </div>
+        <select id="langSel" onchange="changeLang()" style="padding:4px 8px;border-radius:6px;border:1px solid var(--slate);font-size:12px;outline:none">
+          <option value="en">English</option>
+          <option value="bm">Bahasa Malaysia</option>
+        </select>
+      </div>
+
+      <!-- Notifications -->
+      <div style="padding:16px;border-bottom:1px solid var(--mist);display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="openModal('modal-notif')">
+        <div style="display:flex;align-items:center;gap:12px;color:var(--ink)">
+          <div class="prof-icon" style="background:#FFFBEB">🔔</div>
+          <span style="font-size:14px;font-weight:500" data-tr="notif">Notifications</span>
+        </div>
+        <div style="font-size:12px;color:var(--slate)">Manage ›</div>
+      </div>
+
+      <!-- Connected Devices -->
+      <div style="padding:16px;border-bottom:1px solid var(--mist);display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="openModal('modal-devices')">
+        <div style="display:flex;align-items:center;gap:12px;color:var(--ink)">
+          <div class="prof-icon" style="background:#F0FDF4">⌚</div>
+          <span style="font-size:14px;font-weight:500" data-tr="device">Connected Devices</span>
+        </div>
+        <div style="font-size:12px;color:var(--jade);font-weight:bold">1 Active ›</div>
+      </div>
+
+      <!-- Privacy -->
+      <div style="padding:16px;border-bottom:1px solid var(--mist);display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="openModal('modal-privacy')">
+        <div style="display:flex;align-items:center;gap:12px;color:var(--ink)">
+          <div class="prof-icon" style="background:#FFF1F2">🛡️</div>
+          <span style="font-size:14px;font-weight:500" data-tr="priv">Privacy &amp; Health Data</span>
+        </div>
+        <div style="font-size:12px;color:var(--slate)">View ›</div>
+      </div>
+
+      <!-- Family Sync -->
+      <div style="padding:16px;border-bottom:1px solid var(--mist);display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="openModal('modal-family')">
+        <div style="display:flex;align-items:center;gap:12px;color:var(--ink)">
+          <div class="prof-icon" style="background:#EFF6FF">👨‍👩‍👧</div>
+          <span style="font-size:14px;font-weight:500">Family Sync</span>
+        </div>
+        <div style="font-size:12px;color:var(--sky);font-weight:bold">2 Linked ›</div>
+      </div>
+
+      <!-- Security -->
+      <div style="padding:16px;border-bottom:1px solid var(--mist);display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="openModal('modal-security')">
+        <div style="display:flex;align-items:center;gap:12px;color:var(--ink)">
+          <div class="prof-icon" style="background:#F0FDF4">🔒</div>
+          <span style="font-size:14px;font-weight:500">Security</span>
+        </div>
+        <div style="font-size:12px;color:var(--slate)">Manage ›</div>
+      </div>
+
+      <!-- Log Out -->
+      <div style="padding:16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;color:#EF4444" onclick="openModal('modal-logout')">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="prof-icon" style="background:#FEF2F2">🚪</div>
+          <span style="font-size:14px;font-weight:500" data-tr="log">Log Out</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ BOTTOM NAV ═══════════════════════════ -->
+<div class="bnav" id="mainNav">
+  <button id="nav-home" class="active" onclick="nav('home')">
+    <span class="nav-icon">🏠</span><span class="nav-label" data-tr="navHome">Home</span>
+  </button>
+  <button id="nav-doc" onclick="nav('doc')">
+    <span class="nav-icon">🩺</span><span class="nav-label" data-tr="navDoc">GrabDoc</span>
+  </button>
+  <button id="nav-ibu" onclick="nav('ibu')">
+    <span class="nav-icon">🤰</span><span class="nav-label" data-tr="navIbu">Ibu Sihat</span>
+  </button>
+  <button id="nav-meals" onclick="nav('meals')">
+    <span class="nav-icon">🍱</span><span class="nav-label" data-tr="navMeal">Meals</span>
+  </button>
+  <button id="nav-profile" onclick="nav('profile')">
+    <span class="nav-icon">👤</span><span class="nav-label" data-tr="navProf">Profile</span>
+  </button>
+</div>
+
+<!-- ═══════════════════════════ MODALS ═══════════════════════════ -->
+
+<!-- Edit Profile Modal -->
+<div id="modal-edit" class="modal-overlay">
+  <div class="modal" style="font-family:sans-serif">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <h3 style="color:var(--ink)">✏️ Edit Profile</h3>
+      <i class="ti ti-x" style="cursor:pointer;color:var(--slate);font-size:20px" onclick="closeModal('modal-edit')"></i>
+    </div>
+    <label style="font-size:11px;font-weight:600;color:var(--slate)">Full Name</label>
+    <input type="text" id="inpName" class="input-field" value="Sarah Lee">
+    <label style="font-size:11px;font-weight:600;color:var(--slate);display:block;margin-top:10px">Phone Number</label>
+    <input type="text" id="inpPhone" class="input-field" value="+60 12-345 6789">
+    <label style="font-size:11px;font-weight:600;color:var(--slate);display:block;margin-top:10px">Date of Birth</label>
+    <input type="date" id="inpDOB" class="input-field" value="1995-03-14">
+    <label style="font-size:11px;font-weight:600;color:var(--slate);display:block;margin-top:10px">Pregnancy Start Date (LMP)</label>
+    <input type="date" id="inpPregnancyStart" class="input-field" value="2025-11-14">
+    <label style="font-size:11px;font-weight:600;color:var(--slate);display:block;margin-top:10px">Blood Type</label>
+    <select id="inpBlood" class="input-field">
+      <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+      <option>AB+</option><option>AB-</option><option selected>O+</option><option>O-</option>
+    </select>
+    <div style="display:flex;gap:8px;margin-top:20px">
+      <button class="btn-outline" style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px" onclick="closeModal('modal-edit')">
+        <i class="ti ti-x"></i> Cancel
+      </button>
+      <button class="btn-rose" style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px" onclick="saveProf()">
+        <i class="ti ti-device-floppy"></i> Save
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Reschedule Modal -->
+<div id="modal-reschedule" class="modal-overlay">
+  <div class="modal" style="font-family:sans-serif">
+    <h3 style="margin-bottom:12px;color:var(--ink)">Reschedule Appointment</h3>
+    <input type="date" id="resDate" class="input-field" value="2026-05-15">
+    <input type="time" id="resTime" class="input-field" value="14:00">
+    <div style="display:flex;gap:8px;margin-top:20px">
+      <button class="btn-outline" style="flex:1" onclick="closeModal('modal-reschedule')">Cancel</button>
+      <button class="btn-rose" style="flex:1" onclick="saveReschedule()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Track Appointment Modal -->
+<div id="modal-track" class="modal-overlay">
+  <div class="modal" style="font-family:sans-serif">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <h3 style="color:var(--ink)">📍 Appointment Tracker</h3>
+      <button onclick="closeModal('modal-track')" style="width:32px;height:32px;border-radius:50%;background:#F1F5F9;border:none;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--slate);font-weight:bold">✕</button>
+    </div>
+    <div style="background:linear-gradient(135deg,#FFF1F2,#FFE4EC);border-radius:12px;padding:12px;margin-bottom:16px;border:1px solid var(--peach)">
+      <div style="font-size:13px;font-weight:bold;color:var(--rose)">Dr. Aisha Rahman</div>
+      <div style="font-size:11px;color:var(--slate)">May 08, 2026 · 10:00 AM · Antenatal Check-up</div>
+      <div style="margin-top:8px;display:flex;gap:8px">
+        <span class="badge" style="background:#D1FAE5;color:#065F46">Confirmed ✅</span>
+        <span class="badge" style="background:#DBEAFE;color:#1E40AF">KPJ Damansara</span>
+      </div>
+    </div>
+    <div style="font-size:12px;font-weight:700;color:var(--ink);margin-bottom:12px">Appointment Journey</div>
+    <div class="track-step-wrap">
+      <div class="track-step">
+        <div class="track-dot" style="background:#D1FAE5;color:#065F46">✅</div>
+        <div>
+          <div style="font-size:13px;font-weight:bold;color:var(--ink)">Booking Confirmed</div>
+          <div style="font-size:11px;color:var(--slate)">May 05, 2026 · 2:14 PM — Your appointment has been confirmed by the clinic.</div>
+        </div>
+      </div>
+      <div class="track-step">
+        <div class="track-dot" style="background:#DBEAFE;color:#1E40AF">📨</div>
+        <div>
+          <div style="font-size:13px;font-weight:bold;color:var(--ink)">Reminder Sent</div>
+          <div style="font-size:11px;color:var(--slate)">May 07, 2026 · 9:00 AM — SMS & push notification reminder delivered.</div>
+        </div>
+      </div>
+      <div class="track-step">
+        <div class="track-dot" style="background:#FEF3C7;color:#92400E">⏳</div>
+        <div>
+          <div style="font-size:13px;font-weight:bold;color:var(--ink)">Upcoming — Check-in Available</div>
+          <div style="font-size:11px;color:var(--slate)">May 08, 2026 · 9:30 AM — You may check in digitally 30 mins before.</div>
+        </div>
+      </div>
+      <div class="track-step">
+        <div class="track-dot" style="background:var(--mist);color:var(--slate)">🩺</div>
+        <div>
+          <div style="font-size:13px;font-weight:bold;color:var(--slate)">Consultation</div>
+          <div style="font-size:11px;color:var(--slate)">May 08, 2026 · 10:00 AM — Antenatal check-up with Dr. Aisha Rahman.</div>
+        </div>
+      </div>
+      <div class="track-step">
+        <div class="track-dot" style="background:var(--mist);color:var(--slate)">📋</div>
+        <div>
+          <div style="font-size:13px;font-weight:bold;color:var(--slate)">Report & Prescription</div>
+          <div style="font-size:11px;color:var(--slate)">After consultation — Your report & e-prescription will be available in GrabDoc.</div>
+        </div>
+      </div>
+    </div>
+    <div style="background:#F0FDF4;border-radius:10px;padding:10px;margin-top:8px;border:1px solid #BBF7D0">
+      <div style="font-size:11px;font-weight:bold;color:#166534;margin-bottom:4px">📍 Getting There</div>
+      <div style="font-size:11px;color:#15803D">KPJ Damansara Specialist Hospital<br>119, Jalan SS20/10, Damansara Utama<br>47400 Petaling Jaya</div>
+      <button onclick="alert('Opening Maps...')" style="background:#16A34A;border:none;color:white;border-radius:7px;padding:6px 12px;font-size:11px;font-family:sans-serif;font-weight:700;margin-top:8px;cursor:pointer">🗺 Get Directions</button>
+    </div>
+    <button class="btn-outline" style="margin-top:12px" onclick="closeModal('modal-track')">Close</button>
+  </div>
+</div>
+
+<!-- Delivery Modal -->
+<div id="modal-delivery" class="modal-overlay">
+  <div class="modal" style="font-family:sans-serif">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <h3 style="color:var(--ink)">🛵 Order Delivery</h3>
+      <button onclick="closeModal('modal-delivery')" style="width:30px;height:30px;border-radius:50%;background:#F1F5F9;border:none;font-size:15px;cursor:pointer;color:var(--slate);font-weight:bold">✕</button>
+    </div>
+
+    <!-- Prescription Summary -->
+    <div style="background:linear-gradient(135deg,#FFF7ED,#FED7AA);border-radius:12px;padding:12px;margin-bottom:14px;border:1px solid #FCD34D">
+      <div style="font-size:12px;font-weight:bold;color:#7C2D12;margin-bottom:6px">💊 Prescription — Dr. Aisha Rahman</div>
+      <div style="font-size:11px;color:#9A3412;line-height:1.7">
+        • Obimin Pluz — 1 tab daily<br>
+        • Calcium Carbonate 600mg — 1 tab twice daily<br>
+        • Ferrous Fumarate 200mg — 1 tab daily
+      </div>
+    </div>
+
+    <!-- Tracking Info -->
+    <div style="background:#F8FAFC;border-radius:12px;padding:12px;margin-bottom:14px;border:1px solid var(--mist)">
+      <div style="font-size:11px;font-weight:700;color:var(--ink);margin-bottom:8px">📦 Tracking Details</div>
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:11px;color:var(--ink)">
+        <div style="display:flex;justify-content:space-between">
+          <span style="color:var(--slate)">Tracking ID</span>
+          <span style="font-weight:bold;color:var(--teal)">GM-889012 📋</span>
+        </div>
+        <div style="display:flex;justify-content:space-between">
+          <span style="color:var(--slate)">Order Date</span>
+          <span id="delivOrderDate" style="font-weight:600">May 08, 2026</span>
+        </div>
+        <div style="display:flex;justify-content:space-between">
+          <span style="color:var(--slate)">Order Time</span>
+          <span id="delivOrderTime" style="font-weight:600">—</span>
+        </div>
+        <div style="display:flex;justify-content:space-between">
+          <span style="color:var(--slate)">Estimated Arrival</span>
+          <span id="delivETA" style="font-weight:bold;color:var(--rose)">—</span>
+        </div>
+        <div style="display:flex;justify-content:space-between">
+          <span style="color:var(--slate)">Delivery By</span>
+          <span style="font-weight:600">GrabMart Express 🛵</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Delivery Tracking Steps -->
+    <div style="font-size:11px;font-weight:700;color:var(--ink);margin-bottom:8px">🗺 Delivery Status</div>
+    <div style="margin-bottom:14px">
+      <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:10px">
+        <div style="width:28px;height:28px;border-radius:50%;background:#D1FAE5;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">✅</div>
+        <div><div style="font-size:12px;font-weight:bold;color:var(--ink)">Order Placed</div><div id="stepOrderTime" style="font-size:10px;color:var(--slate)">—</div></div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:10px">
+        <div style="width:28px;height:28px;border-radius:50%;background:#FEF3C7;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">⏳</div>
+        <div><div style="font-size:12px;font-weight:bold;color:var(--ink)">Pharmacist Packing</div><div style="font-size:10px;color:var(--slate)">Est. 10–15 mins</div></div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:10px">
+        <div style="width:28px;height:28px;border-radius:50%;background:#F1F5F9;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">🛵</div>
+        <div><div style="font-size:12px;font-weight:bold;color:var(--slate)">Driver Assigned</div><div style="font-size:10px;color:var(--slate)">Pending</div></div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <div style="width:28px;height:28px;border-radius:50%;background:#F1F5F9;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">🏠</div>
+        <div><div style="font-size:12px;font-weight:bold;color:var(--slate)">Delivered to Your Door</div><div id="delivETA2" style="font-size:10px;color:var(--slate)">—</div></div>
+      </div>
+    </div>
+
+    <!-- Delivery Address -->
+    <div style="background:#EFF6FF;border-radius:10px;padding:10px;margin-bottom:14px;border:1px solid #BFDBFE;font-size:11px;color:#1E40AF">
+      <div style="font-weight:bold;margin-bottom:3px">📍 Deliver To</div>
+      <div>No. 12, Jalan Bukit Damansara 2<br>50490 Kuala Lumpur, Wilayah Persekutuan</div>
+    </div>
+
+    <!-- Payment Method -->
+    <label style="font-size:11px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.8px">Payment Method</label>
+    <select id="delivPayment" class="input-field" style="margin-bottom:12px">
+      <option>📱 TouchNGo (Online Banking)</option>
+      <option>💳 Credit / Debit Card</option>
+      <option>💵 Cash on Delivery</option>
+    </select>
+
+    <!-- Order Total -->
+    <div style="display:flex;justify-content:space-between;align-items:center;background:#F8FAFC;border-radius:10px;padding:10px 12px;margin-bottom:16px;border:1px solid var(--mist)">
+      <div style="font-size:12px;font-family:sans-serif">
+        <div style="color:var(--slate)">Subtotal: <span style="color:var(--ink)">RM 38.50</span></div>
+        <div style="color:var(--slate)">Delivery: <span style="color:var(--ink)">RM 6.50</span></div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:10px;color:var(--slate)">Total</div>
+        <div style="font-size:20px;font-weight:bold;color:var(--rose)">RM 45.00</div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px">
+      <button class="btn-outline" style="flex:1;border-color:var(--slate);color:var(--slate)" onclick="closeModal('modal-delivery')">Cancel</button>
+      <button style="flex:2;background:linear-gradient(135deg,#EA580C,#F97316);border:none;border-radius:10px;padding:12px;font-size:13px;color:#fff;font-family:sans-serif;font-weight:700;cursor:pointer" onclick="confirmDeliv()">Pay RM 45 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Notifications Modal -->
+<div id="modal-notif" class="modal-overlay">
+  <div class="modal" style="font-family:sans-serif">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <h3 style="color:var(--ink)">🔔 Notifications</h3>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:12px;color:var(--ink)"><span>Vitals Alerts</span><input type="checkbox" checked></div>
+    <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:12px;color:var(--ink)"><span>Appointment Reminders</span><input type="checkbox" checked></div>
+    <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:12px;color:var(--ink)"><span>Meal Time Push</span><input type="checkbox"></div>
+    <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:12px;color:var(--ink)"><span>Baby Kick Reminders</span><input type="checkbox" checked></div>
+    <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:12px;color:var(--ink)"><span>Family Sync Updates</span><input type="checkbox" checked></div>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="btn-outline" style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;border-color:var(--slate);color:var(--slate)" onclick="closeModal('modal-notif')">
+        <i class="ti ti-x"></i> Cancel
+      </button>
+      <button class="btn-rose" style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px" onclick="closeModal('modal-notif');alert('Notification settings saved!')">
+        <i class="ti ti-device-floppy"></i> Save
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Connected Devices Modal -->
+<div id="modal-devices" class="modal-overlay">
+  <div class="modal" style="font-family:sans-serif">
+
+    <!-- ── VIEW: Main ── -->
+    <div id="devMain">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <h3 style="color:var(--ink)">⌚ Connected Devices</h3>
+        <button onclick="closeModal('modal-devices')" style="width:30px;height:30px;border-radius:50%;background:#F1F5F9;border:none;font-size:15px;cursor:pointer;color:var(--slate);font-weight:bold">✕</button>
+      </div>
+
+      <!-- Connected device card -->
+      <div id="devAppleCard" style="background:#F0FDF4;padding:12px;border-radius:12px;font-size:13px;font-weight:bold;margin-bottom:10px;border:1px solid #BBF7D0;color:#166534;display:flex;justify-content:space-between;align-items:center">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:22px">⌚</span>
+          <div>
+            <div style="font-size:13px;font-weight:bold;color:#166534">Apple Watch Series 8</div>
+            <div id="devAppleStatus" style="font-size:10px;color:#16A34A;font-weight:normal">● Live syncing — last sync 2 min ago</div>
+          </div>
+        </div>
+        <span id="devAppleBadge" class="badge" style="background:#D1FAE5;color:#065F46">Connected</span>
+      </div>
+
+      <!-- Synced vitals from Apple Watch -->
+      <div id="devAppleSyncData" style="background:#FAFFFE;border-radius:10px;padding:10px;margin-bottom:10px;border:1px solid #DCFCE7">
+        <div style="font-size:10px;font-weight:700;color:#15803D;margin-bottom:6px">📊 Last Synced Data</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span style="background:#D1FAE5;color:#065F46;border-radius:6px;padding:3px 8px;font-size:10px;font-weight:600">❤️ 82 bpm</span>
+          <span style="background:#D1FAE5;color:#065F46;border-radius:6px;padding:3px 8px;font-size:10px;font-weight:600">😴 7h 12m sleep</span>
+          <span style="background:#D1FAE5;color:#065F46;border-radius:6px;padding:3px 8px;font-size:10px;font-weight:600">🚶 4,820 steps</span>
+          <span style="background:#D1FAE5;color:#065F46;border-radius:6px;padding:3px 8px;font-size:10px;font-weight:600">🫁 SpO₂ 98%</span>
+        </div>
+      </div>
+
+      <button onclick="devShowView('devDisconnect')" style="width:100%;background:#FEE2E2;border:1px solid #FECACA;color:#991B1B;border-radius:10px;padding:10px;font-size:12px;font-weight:700;cursor:pointer;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:6px">
+        🔗 Disconnect Device
+      </button>
+
+      <div style="font-size:12px;font-weight:bold;color:var(--ink);margin-bottom:10px">➕ Connect Other Devices</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+
+        <button onclick="devStartPairing('Fitbit','⌚','#3B5FC0','Sync steps, heart rate & sleep data','fitbit')"
+          style="background:#F8FAFC;border:1.5px solid var(--mist);border-radius:12px;padding:12px;font-size:12px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:12px;transition:border-color .2s"
+          onmouseover="this.style.borderColor='#3B5FC0'" onmouseout="this.style.borderColor='var(--mist)'">
+          <div style="width:40px;height:40px;border-radius:10px;background:#EEF2FF;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">⌚</div>
+          <div><div style="font-weight:bold;color:var(--ink)">Fitbit</div><div style="font-size:10px;color:var(--slate)">Sync steps, heart rate &amp; sleep</div></div>
+          <span style="margin-left:auto;font-size:11px;color:var(--slate)">›</span>
+        </button>
+
+        <button onclick="devStartPairing('Samsung Health','📱','#1428A0','Sync vitals from Galaxy Watch','samsung')"
+          style="background:#F8FAFC;border:1.5px solid var(--mist);border-radius:12px;padding:12px;font-size:12px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:12px;transition:border-color .2s"
+          onmouseover="this.style.borderColor='#1428A0'" onmouseout="this.style.borderColor='var(--mist)'">
+          <div style="width:40px;height:40px;border-radius:10px;background:#EEF2FF;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">📱</div>
+          <div><div style="font-weight:bold;color:var(--ink)">Samsung Health</div><div style="font-size:10px;color:var(--slate)">Sync vitals from Galaxy Watch</div></div>
+          <span style="margin-left:auto;font-size:11px;color:var(--slate)">›</span>
+        </button>
+
+        <button onclick="devStartPairing('BP Monitor (Omron)','🩺','#0D9488','Auto-sync blood pressure readings','omron')"
+          style="background:#F8FAFC;border:1.5px solid var(--mist);border-radius:12px;padding:12px;font-size:12px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:12px;transition:border-color .2s"
+          onmouseover="this.style.borderColor='#0D9488'" onmouseout="this.style.borderColor='var(--mist)'">
+          <div style="width:40px;height:40px;border-radius:10px;background:#F0FDF4;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">🩺</div>
+          <div><div style="font-weight:bold;color:var(--ink)">BP Monitor (Omron)</div><div style="font-size:10px;color:var(--slate)">Auto-sync blood pressure readings</div></div>
+          <span style="margin-left:auto;font-size:11px;color:var(--slate)">›</span>
+        </button>
+
+      </div>
+      <button class="btn-outline" style="margin-top:14px;border-color:var(--slate);color:var(--slate)" onclick="closeModal('modal-devices')">Close</button>
+    </div>
+
+    <!-- ── VIEW: Disconnect Confirm ── -->
+    <div id="devDisconnect" style="display:none">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;cursor:pointer" onclick="devShowView('devMain')">
+        <span style="font-size:18px;color:var(--slate)">‹</span>
+        <span style="font-size:12px;color:var(--slate)">Back</span>
+      </div>
+      <h3 style="color:var(--ink);margin-bottom:16px">🔗 Disconnect Device</h3>
+      <div style="background:#F0FDF4;padding:12px;border-radius:12px;margin-bottom:14px;border:1px solid #BBF7D0;display:flex;align-items:center;gap:10px">
+        <span style="font-size:22px">⌚</span>
+        <div><div style="font-size:13px;font-weight:bold;color:#166534">Apple Watch Series 8</div><div style="font-size:10px;color:#16A34A">Currently Active</div></div>
+      </div>
+      <div style="background:#FEF2F2;border-radius:10px;padding:12px;margin-bottom:16px;border:1px solid #FECACA">
+        <div style="font-size:11px;font-weight:bold;color:#991B1B;margin-bottom:4px">⚠️ Are you sure?</div>
+        <div style="font-size:11px;color:#7F1D1D;line-height:1.6">Disconnecting will stop syncing your heart rate, steps, SpO₂ and sleep data. Your vitals will no longer update automatically.</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button onclick="devShowView('devMain')" style="flex:1;background:#F1F5F9;border:none;border-radius:10px;padding:11px;font-size:12px;font-weight:700;cursor:pointer;color:var(--slate)">Keep Connected</button>
+        <button onclick="devConfirmDisconnect()" style="flex:1;background:#EF4444;border:none;border-radius:10px;padding:11px;font-size:12px;color:#fff;font-weight:700;cursor:pointer">Yes, Disconnect</button>
+      </div>
+    </div>
+
+    <!-- ── VIEW: Disconnected State ── -->
+    <div id="devDisconnected" style="display:none">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <h3 style="color:var(--ink)">⌚ Connected Devices</h3>
+        <button onclick="closeModal('modal-devices')" style="width:30px;height:30px;border-radius:50%;background:#F1F5F9;border:none;font-size:15px;cursor:pointer;color:var(--slate);font-weight:bold">✕</button>
+      </div>
+      <div style="background:#F8FAFC;padding:12px;border-radius:12px;margin-bottom:10px;border:1px solid var(--mist);display:flex;justify-content:space-between;align-items:center;opacity:.6">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:22px">⌚</span>
+          <div><div style="font-size:13px;font-weight:bold;color:var(--ink)">Apple Watch Series 8</div><div style="font-size:10px;color:var(--slate)">Not connected</div></div>
+        </div>
+        <span class="badge" style="background:#F1F5F9;color:var(--slate)">Disconnected</span>
+      </div>
+      <button onclick="devReconnect()" style="width:100%;background:#F0FDF4;border:1px solid #BBF7D0;color:#15803D;border-radius:10px;padding:10px;font-size:12px;font-weight:700;cursor:pointer;margin-bottom:14px">🔄 Reconnect Apple Watch</button>
+      <div style="font-size:12px;font-weight:bold;color:var(--ink);margin-bottom:8px">➕ Connect Other Devices</div>
+      <div style="font-size:11px;color:var(--slate)">Tap any device above to begin pairing.</div>
+      <button class="btn-outline" style="margin-top:14px;border-color:var(--slate);color:var(--slate)" onclick="closeModal('modal-devices')">Close</button>
+    </div>
+
+    <!-- ── VIEW: Pairing Wizard ── -->
+    <div id="devPairingView" style="display:none">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;cursor:pointer" onclick="devShowView('devMain')">
+        <span style="font-size:18px;color:var(--slate)">‹</span>
+        <span style="font-size:12px;color:var(--slate)">Back</span>
+      </div>
+      <h3 id="pairTitle" style="color:var(--ink);margin-bottom:4px">Pair Device</h3>
+      <div id="pairSubtitle" style="font-size:11px;color:var(--slate);margin-bottom:16px"></div>
+
+      <!-- Step Indicator -->
+      <div style="display:flex;align-items:center;gap:4px;margin-bottom:18px" id="pairStepIndicator">
+        <div id="pstep1" style="flex:1;height:4px;border-radius:4px;background:var(--rose)"></div>
+        <div id="pstep2" style="flex:1;height:4px;border-radius:4px;background:var(--mist)"></div>
+        <div id="pstep3" style="flex:1;height:4px;border-radius:4px;background:var(--mist)"></div>
+      </div>
+
+      <!-- Step Content -->
+      <div id="pairStep1">
+        <div style="text-align:center;padding:16px 0">
+          <div id="pairDeviceIcon" style="font-size:48px;margin-bottom:12px">⌚</div>
+          <div style="font-size:14px;font-weight:bold;color:var(--ink);margin-bottom:8px">Before you begin</div>
+          <ul style="font-size:12px;color:var(--slate);text-align:left;line-height:1.8;margin:0 10px 16px">
+            <li>Ensure Bluetooth is turned on</li>
+            <li>Make sure your device is charged (&gt;20%)</li>
+            <li>Open the device's companion app if required</li>
+            <li>Keep device within 30 cm of your phone</li>
+          </ul>
+          <button onclick="devStartScan()" style="width:100%;background:linear-gradient(135deg,var(--rose),var(--rose-soft));border:none;border-radius:12px;padding:13px;font-size:13px;color:#fff;font-family:sans-serif;font-weight:700;cursor:pointer">Start Pairing 🔵</button>
+        </div>
+      </div>
+
+      <div id="pairStep2" style="display:none">
+        <div style="text-align:center;padding:16px 0">
+          <div style="font-size:40px;margin-bottom:12px;animation:spin 1.5s linear infinite;display:inline-block">🔵</div>
+          <div style="font-size:14px;font-weight:bold;color:var(--ink);margin-bottom:6px">Scanning for devices...</div>
+          <div style="font-size:11px;color:var(--slate);margin-bottom:16px">Searching nearby Bluetooth devices</div>
+          <div style="background:#F8FAFC;border-radius:10px;padding:10px;border:1px solid var(--mist)">
+            <div style="font-size:11px;color:var(--slate)">🔍 Scanning...</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="pairStep3" style="display:none">
+        <div style="text-align:center;padding:10px 0">
+          <div style="font-size:40px;margin-bottom:10px">📡</div>
+          <div style="font-size:14px;font-weight:bold;color:var(--ink);margin-bottom:6px">Device Found!</div>
+          <div id="pairFoundDevice" style="background:#F0FDF4;border-radius:12px;padding:12px;margin-bottom:14px;border:1px solid #BBF7D0;display:flex;align-items:center;gap:10px;text-align:left">
+            <span id="pairFoundIcon" style="font-size:24px">⌚</span>
+            <div><div id="pairFoundName" style="font-size:13px;font-weight:bold;color:#166534"></div><div style="font-size:10px;color:#16A34A">Signal: Strong ●●●●</div></div>
+          </div>
+          <button onclick="devConfirmPair()" style="width:100%;background:#16A34A;border:none;border-radius:12px;padding:13px;font-size:13px;color:#fff;font-family:sans-serif;font-weight:700;cursor:pointer">✅ Pair &amp; Connect</button>
+          <button onclick="devStartScan()" style="width:100%;background:transparent;border:none;font-size:12px;color:var(--slate);cursor:pointer;margin-top:8px;padding:4px">🔄 Search again</button>
+        </div>
+      </div>
+
+      <div id="pairSuccess" style="display:none">
+        <div style="text-align:center;padding:16px 0">
+          <div style="font-size:52px;margin-bottom:12px">✅</div>
+          <div style="font-size:16px;font-weight:bold;color:#15803D;margin-bottom:6px">Connected!</div>
+          <div id="pairSuccessMsg" style="font-size:12px;color:var(--slate);margin-bottom:16px"></div>
+          <div style="background:#F0FDF4;border-radius:12px;padding:12px;border:1px solid #BBF7D0;text-align:left;margin-bottom:16px">
+            <div style="font-size:11px;font-weight:bold;color:#166534;margin-bottom:6px">Now syncing:</div>
+            <div id="pairSyncList" style="font-size:11px;color:#15803D;line-height:1.8"></div>
+          </div>
+          <button onclick="devShowView('devMain')" class="btn-rose">Done ✓</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Privacy & Health Data Modal -->
+<div id="modal-privacy" class="modal-overlay">
+  <div class="modal" style="font-family:sans-serif">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <h3 style="color:var(--ink)">🛡 Privacy & Health Data</h3>
+      <i class="ti ti-x" style="cursor:pointer;color:var(--slate);font-size:20px" onclick="closeModal('modal-privacy')"></i>
+    </div>
+    <p style="font-size:11px;color:var(--slate);margin-bottom:12px">PDPA Compliant. All data encrypted end-to-end.</p>
+    <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:12px;color:var(--ink)"><span>Share Data with AI</span><input type="checkbox" checked></div>
+    <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:12px;color:var(--ink)"><span>Share with Panel Clinic</span><input type="checkbox" checked></div>
+    <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:16px;color:var(--ink)"><span>Share with Family Sync</span><input type="checkbox" checked></div>
+    
+    <!-- T&C Section -->
+    <div style="background:#FFFBEB;border:1px solid #FCD34D;border-radius:10px;padding:12px;margin-bottom:12px;max-height:140px;overflow-y:auto">
+      <div style="font-size:11px;font-weight:bold;color:#92400E;margin-bottom:6px">📜 Terms & Conditions — Health Data Agreement</div>
+      <div style="font-size:10px;color:#78350F;line-height:1.6">
+        <strong>1. Data Collection:</strong> GrabDoctor Maternal collects health vitals, appointment records, prescription history, and pregnancy data to provide personalised maternal care services.<br><br>
+        <strong>2. Data Usage:</strong> Your data is used solely to improve your maternal health experience, power AI recommendations, and share with your chosen healthcare providers.<br><br>
+        <strong>3. Data Security:</strong> All health data is encrypted using AES-256 and stored on PDPA-compliant servers in Malaysia. We do not sell your data to third parties.<br><br>
+        <strong>4. Your Rights:</strong> You may request data deletion or export at any time by contacting support@grabdoctor.my.<br><br>
+        <strong>5. Family Sync:</strong> Shared health summaries sent via Family Sync are anonymised and require explicit consent from the user before each transmission.<br><br>
+        <strong>6. AI Processing:</strong> Anonymised data may be used to improve AI recommendations. You may opt-out at any time in settings.<br><br>
+        <strong>7. Consent:</strong> By checking the agreement box below, you acknowledge you have read and agree to these terms.
+      </div>
+    </div>
+    <div id="tcAgree" style="display:flex;align-items:flex-start;gap:10px;margin-bottom:16px;cursor:pointer" onclick="toggleTC()">
+      <div id="tcBox" style="width:20px;height:20px;border:2px solid var(--slate);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;font-size:13px"></div>
+      <div style="font-size:11px;color:var(--ink);line-height:1.5">I have read and agree to the <span style="color:var(--rose);font-weight:bold">Terms & Conditions</span> and <span style="color:var(--rose);font-weight:bold">Health Data Agreement</span></div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn-outline" style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;border-color:var(--slate);color:var(--slate)" onclick="closeModal('modal-privacy')">
+        <i class="ti ti-x"></i> Cancel
+      </button>
+      <button id="privacySaveBtn" class="btn-rose" style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;opacity:.5" onclick="savePrivacy()">
+        <i class="ti ti-device-floppy"></i> Save
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Family Sync Modal -->
+<div id="modal-family" class="modal-overlay">
+  <div class="modal" style="font-family:sans-serif">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <h3 style="color:var(--ink)">👨‍👩‍👧 Family Sync</h3>
+      <i class="ti ti-x" style="cursor:pointer;color:var(--slate);font-size:20px" onclick="closeModal('modal-family')"></i>
+    </div>
+    <div style="background:#EFF6FF;border-radius:10px;padding:10px;margin-bottom:14px;border:1px solid #BFDBFE">
+      <div style="font-size:11px;color:#1D4ED8;font-weight:bold;margin-bottom:2px">💚 How it works</div>
+      <div style="font-size:11px;color:#3B82F6">Your maternal health summary is shared with family members via WhatsApp. They get a daily update so they can support you better.</div>
+    </div>
+    
+    <div style="font-size:12px;font-weight:bold;color:var(--ink);margin-bottom:10px">Linked Family Members</div>
+    
+    <div class="family-member">
+      <div class="family-avatar">AH</div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:bold;color:var(--ink)">Ahmad Hazim (Husband)</div>
+        <div style="font-size:11px;color:var(--slate)">+60 17-234 5678</div>
+      </div>
+      <span class="badge" style="background:#D1FAE5;color:#065F46">Active</span>
+    </div>
+    
+    <div class="family-member" style="border-bottom:none;margin-bottom:14px">
+      <div class="family-avatar" style="background:#EFF6FF;color:#3B82F6">SM</div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:bold;color:var(--ink)">Siti Mariam (Mother)</div>
+        <div style="font-size:11px;color:var(--slate)">+60 12-876 5432</div>
+      </div>
+      <span class="badge" style="background:#D1FAE5;color:#065F46">Active</span>
+    </div>
+    
+    <button onclick="sendFamilyUpdate()" style="width:100%;background:#25D366;border:none;color:white;border-radius:10px;padding:12px;font-size:13px;font-family:sans-serif;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px">
+      <span style="font-size:18px">📲</span> Send Today's Update via WhatsApp
+    </button>
+    
+    <button onclick="addFamilyMember()" style="width:100%;background:white;border:1px dashed var(--slate);color:var(--slate);border-radius:10px;padding:10px;font-size:12px;font-family:sans-serif;font-weight:700;cursor:pointer;margin-bottom:10px">
+      + Add Family Member
+    </button>
+    
+    <div style="font-size:12px;font-weight:bold;color:var(--ink);margin-bottom:6px">What gets shared:</div>
+    <ul style="font-size:11px;color:var(--slate);margin-left:14px;line-height:1.7">
+      <li>Daily vitals summary (BP, heart rate, weight)</li>
+      <li>Baby kick count</li>
+      <li>Next appointment details</li>
+      <li>Medication reminders</li>
+    </ul>
+    <button class="btn-outline" style="margin-top:14px;border-color:var(--slate);color:var(--slate)" onclick="closeModal('modal-family')">Close</button>
+  </div>
+</div>
+
+<!-- Security Modal -->
+<div id="modal-security" class="modal-overlay">
+  <div class="modal" style="font-family:sans-serif">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <h3 style="color:var(--ink)">🔒 Security</h3>
+      <i class="ti ti-x" style="cursor:pointer;color:var(--slate);font-size:20px" onclick="closeModal('modal-security')"></i>
+    </div>
+    
+    <div style="font-size:12px;font-weight:bold;color:var(--slate);margin-bottom:6px;text-transform:uppercase;letter-spacing:.8px">Change Email</div>
+    <label style="font-size:11px;color:var(--slate)">Current Email</label>
+    <input type="email" class="input-field" value="sarah@example.com" readonly style="background:#F8FAFC;color:var(--slate)">
+    <label style="font-size:11px;color:var(--slate);display:block;margin-top:10px">New Email</label>
+    <input type="email" id="secNewEmail" class="input-field" placeholder="newemail@example.com">
+    
+    <div style="height:1px;background:var(--mist);margin:16px 0"></div>
+    
+    <div style="font-size:12px;font-weight:bold;color:var(--slate);margin-bottom:6px;text-transform:uppercase;letter-spacing:.8px">Change Password</div>
+    <label style="font-size:11px;color:var(--slate)">Current Password</label>
+    <input type="password" id="secOldPwd" class="input-field" placeholder="••••••••">
+    <label style="font-size:11px;color:var(--slate);display:block;margin-top:10px">New Password</label>
+    <input type="password" id="secNewPwd" class="input-field" placeholder="••••••••">
+    <label style="font-size:11px;color:var(--slate);display:block;margin-top:10px">Confirm New Password</label>
+    <input type="password" id="secConfPwd" class="input-field" placeholder="••••••••">
+    
+    <div style="background:#FFF1F2;border-radius:8px;padding:10px;margin-top:12px;border:1px solid var(--peach)">
+      <div style="font-size:10px;color:var(--rose);font-weight:bold">🔐 Password requirements</div>
+      <div style="font-size:10px;color:var(--slate);margin-top:4px">At least 8 characters · One uppercase · One number</div>
+    </div>
+    
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="btn-outline" style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;border-color:var(--slate);color:var(--slate)" onclick="closeModal('modal-security')">
+        <i class="ti ti-x"></i> Cancel
+      </button>
+      <button class="btn-rose" style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px" onclick="saveSecurity()">
+        <i class="ti ti-device-floppy"></i> Save
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Logout Modal -->
+<div id="modal-logout" class="modal-overlay">
+  <div class="modal" style="text-align:center;font-family:sans-serif">
+    <h3 style="margin-bottom:12px;color:var(--ink)">Log Out</h3>
+    <p style="font-size:13px;color:var(--slate);margin-bottom:20px">Are you sure you want to log out?</p>
+    <div style="display:flex;gap:8px">
+      <button class="btn-outline" style="flex:1;border-color:var(--slate);color:var(--slate)" onclick="closeModal('modal-logout')">Cancel</button>
+      <button class="btn-rose" style="flex:1;background:#EF4444" onclick="doLogout()">Log Out</button>
+    </div>
+  </div>
+</div>
+
+<!-- Book Appointment Modal -->
+<div id="modal-book" class="modal-overlay">
+  <div class="modal" style="font-family:sans-serif">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+      <h3 style="color:var(--ink)">📅 Book Appointment</h3>
+      <button onclick="closeModal('modal-book')" style="width:32px;height:32px;border-radius:50%;background:#F1F5F9;border:none;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--slate);font-weight:bold">✕</button>
+    </div>
+    <!-- Doctor Info Banner -->
+    <div id="bookDocBanner" style="background:linear-gradient(135deg,#FFF1F2,#FFE4EC);border-radius:12px;padding:12px;margin-bottom:14px;border:1px solid var(--peach);display:flex;align-items:center;gap:12px">
+      <div id="bookDocAvatar" style="width:44px;height:44px;border-radius:14px;background:rgba(232,84,122,.15);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;color:var(--rose);flex-shrink:0">AR</div>
+      <div>
+        <div id="bookDocName" style="font-size:14px;font-weight:bold;color:var(--ink)">Dr. Aisha Rahman</div>
+        <div id="bookDocSpec" style="font-size:11px;color:var(--slate)">O&G Specialist</div>
+        <div id="bookDocFee" style="font-size:12px;font-weight:bold;color:var(--rose);margin-top:2px">RM 80 per visit</div>
+      </div>
+    </div>
+
+    <!-- Step 1: Appointment Type -->
+    <div style="font-size:11px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px" data-tr="bookApptTypeLabel">Jenis Temujanji</div>
+    <div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap">
+      <span class="chip chip-active" id="atype-antenatal" onclick="selectApptType('Antenatal Check-up','antenatal')">🤰 Antenatal</span>
+      <span class="chip chip-default" id="atype-consult" onclick="selectApptType('Consultation','consult')">💬 Consultation</span>
+      <span class="chip chip-default" id="atype-followup" onclick="selectApptType('Follow-up','followup')">🔁 Follow-up</span>
+      <span class="chip chip-default" id="atype-scan" onclick="selectApptType('Ultrasound Scan','scan')">🔍 Scan</span>
+    </div>
+
+    <!-- Step 2: Visit Mode -->
+    <div style="font-size:11px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px" data-tr="bookVisitModeLabel">Mod Lawatan</div>
+    <div style="display:flex;gap:6px;margin-bottom:14px">
+      <span class="chip chip-active" id="vmode-clinic" onclick="selectVisitMode('🏥 In-Clinic','clinic')">🏥 In-Clinic</span>
+      <span class="chip chip-default" id="vmode-home" onclick="selectVisitMode('🏠 Home Visit','home')">🏠 Home Visit</span>
+      <span class="chip chip-default" id="vmode-tele" onclick="selectVisitMode('📹 Tele-Konsultasi','tele')">📹 Tele</span>
+    </div>
+
+    <!-- Step 3: Date -->
+    <div style="font-size:11px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px" data-tr="bookDateLabel">Tarikh</div>
+    <input type="date" id="bookDate" class="input-field" style="margin-bottom:14px" min="2026-05-08">
+
+    <!-- Step 4: Time Slots -->
+    <div style="font-size:11px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px" data-tr="bookTimeLabel">Masa</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:14px" id="timeSlotGrid">
+      <div class="time-slot selected" onclick="selectTimeSlot(this,'9:00 AM')">9:00 AM</div>
+      <div class="time-slot" onclick="selectTimeSlot(this,'9:30 AM')">9:30 AM</div>
+      <div class="time-slot unavailable">10:00 AM</div>
+      <div class="time-slot" onclick="selectTimeSlot(this,'10:30 AM')">10:30 AM</div>
+      <div class="time-slot" onclick="selectTimeSlot(this,'11:00 AM')">11:00 AM</div>
+      <div class="time-slot unavailable">11:30 AM</div>
+      <div class="time-slot" onclick="selectTimeSlot(this,'2:00 PM')">2:00 PM</div>
+      <div class="time-slot" onclick="selectTimeSlot(this,'2:30 PM')">2:30 PM</div>
+      <div class="time-slot" onclick="selectTimeSlot(this,'3:00 PM')">3:00 PM</div>
+    </div>
+
+    <!-- Step 5: Notes -->
+    <div style="font-size:11px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px" data-tr="bookNotesLabel">Nota (Pilihan)</div>
+    <textarea id="bookNotes" class="input-field" rows="2" placeholder="e.g. Have questions about MGTT test..." style="resize:none;margin-bottom:14px"></textarea>
+
+    <!-- Step 6: Payment -->
+    <div style="font-size:11px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px" data-tr="bookPayLabel">Kaedah Bayaran</div>
+    <select id="bookPayment" class="input-field" style="margin-bottom:16px">
+      <option>📱 TouchNGo (Online Banking)</option>
+      <option>💳 Credit / Debit Card</option>
+      <option>💵 Cash on Delivery</option>
+    </select>
+
+    <!-- Order Summary -->
+    <div style="background:#F8FAFC;border-radius:12px;padding:12px;margin-bottom:16px;border:1px solid var(--mist)">
+      <div style="font-size:11px;font-weight:700;color:var(--ink);margin-bottom:8px" data-tr="bookSummaryTitle">📋 Ringkasan Tempahan</div>
+      <div style="font-size:11px;color:var(--slate);display:flex;flex-direction:column;gap:4px">
+        <div style="display:flex;justify-content:space-between"><span data-tr="bookSummDocLbl">Doktor</span><span id="summDoc" style="color:var(--ink);font-weight:600">Dr. Aisha Rahman</span></div>
+        <div style="display:flex;justify-content:space-between"><span data-tr="bookSummTypeLbl">Jenis</span><span id="summType" style="color:var(--ink)">Antenatal Check-up</span></div>
+        <div style="display:flex;justify-content:space-between"><span data-tr="bookSummModeLbl">Mod</span><span id="summMode" style="color:var(--ink)">🏥 In-Clinic</span></div>
+        <div style="display:flex;justify-content:space-between"><span data-tr="bookSummDateLbl">Tarikh & Masa</span><span id="summDateTime" style="color:var(--ink)">—</span></div>
+        <div style="border-top:1px solid var(--mist);margin-top:6px;padding-top:6px;display:flex;justify-content:space-between;font-weight:bold">
+          <span style="color:var(--ink)" data-tr="bookTotalLbl">Jumlah</span><span id="summFee" style="color:var(--rose)">RM 80</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px">
+      <button class="btn-outline" style="flex:1;border-color:var(--slate);color:var(--slate)" onclick="closeModal('modal-book')" data-tr="bookCancelBtn">Batal</button>
+      <button class="btn-rose" style="flex:1" onclick="confirmBooking()" data-tr="bookConfirmBtn">✅ Sahkan Tempahan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Log Vitals Modal -->
+<div id="modal-logvitals" class="modal-overlay">
+  <div class="modal" style="font-family:sans-serif">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <h3 style="color:var(--ink)">📊 Log Today's Vitals</h3>
+      <i class="ti ti-x" style="cursor:pointer;color:var(--slate);font-size:20px" onclick="closeModal('modal-logvitals')"></i>
+    </div>
+    <label style="font-size:11px;font-weight:600;color:var(--slate)">Blood Pressure (Systolic / Diastolic mmHg)</label>
+    <div style="display:flex;gap:8px">
+      <input type="number" id="vitalSystolic" class="input-field" placeholder="e.g. 118" min="60" max="200" style="flex:1">
+      <input type="number" id="vitalDiastolic" class="input-field" placeholder="e.g. 76" min="40" max="130" style="flex:1">
+    </div>
+    <label style="font-size:11px;font-weight:600;color:var(--slate);display:block;margin-top:10px">Heart Rate (bpm)</label>
+    <input type="number" id="vitalHR" class="input-field" placeholder="e.g. 82" min="40" max="200">
+    <label style="font-size:11px;font-weight:600;color:var(--slate);display:block;margin-top:10px">Weight (kg)</label>
+    <input type="number" id="vitalWeight" class="input-field" placeholder="e.g. 62.4" step="0.1" min="30" max="200">
+    <label style="font-size:11px;font-weight:600;color:var(--slate);display:block;margin-top:10px">Baby Kicks (today)</label>
+    <input type="number" id="vitalKicks" class="input-field" placeholder="e.g. 12" min="0" max="200">
+    <div style="display:flex;gap:8px;margin-top:20px">
+      <button class="btn-outline" style="flex:1" onclick="closeModal('modal-logvitals')">Cancel</button>
+      <button class="btn-rose" style="flex:1" onclick="saveVitals()">Save Vitals</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Meal Modal (AI-powered) -->
+<div id="modal-addmeal" class="modal-overlay">
+  <div class="modal" style="font-family:sans-serif">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <h3 style="color:var(--ink)">🍽 Log a Meal</h3>
+      <button onclick="closeModal('modal-addmeal');resetMealModal()" style="width:30px;height:30px;border-radius:50%;background:#F1F5F9;border:none;font-size:15px;cursor:pointer;color:var(--slate);font-weight:bold">✕</button>
+    </div>
+
+    <!-- Input Fields -->
+    <div id="mealInputSection">
+      <label style="font-size:11px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.8px">Meal Type</label>
+      <select id="mealType" class="input-field" style="margin-bottom:12px">
+        <option value="Breakfast">☀️ Breakfast</option>
+        <option value="Morning Snack">🍎 Morning Snack</option>
+        <option value="Lunch">🌤 Lunch</option>
+        <option value="Afternoon Snack">🍊 Afternoon Snack</option>
+        <option value="Dinner">🌙 Dinner</option>
+        <option value="Supper">🌜 Supper</option>
+      </select>
+
+      <label style="font-size:11px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.8px">Food Description</label>
+      <input type="text" id="mealDesc" class="input-field" placeholder="e.g. Nasi lemak, steamed broccoli with chicken" style="margin-bottom:12px">
+
+      <label style="font-size:11px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.8px">Quantity / Serving Size</label>
+      <input type="text" id="mealQty" class="input-field" placeholder="e.g. 1 plate, 2 pieces, 250ml, half bowl" style="margin-bottom:12px">
+
+      <label style="font-size:11px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.8px">Time</label>
+      <input type="time" id="mealTime" class="input-field" style="margin-bottom:16px">
+
+      <!-- AI Analysis hint -->
+      <div style="background:linear-gradient(135deg,#EFF6FF,#DBEAFE);border-radius:10px;padding:10px;margin-bottom:14px;border:1px solid #BFDBFE">
+        <div style="font-size:11px;color:#1D4ED8;font-weight:bold;margin-bottom:2px">🤖 AI Nutrition Analyzer</div>
+        <div style="font-size:10px;color:#3B82F6">Tap "Analyze & Add" — AI will calculate calories, key nutrients and check if this meal meets your Week 24 maternal needs.</div>
+      </div>
+
+      <div style="display:flex;gap:8px">
+        <button class="btn-outline" style="flex:1;border-color:var(--slate);color:var(--slate)" onclick="closeModal('modal-addmeal');resetMealModal()">Cancel</button>
+        <button class="btn-rose" style="flex:2" onclick="analyzeMealWithAI()">🤖 Analyze &amp; Add</button>
+      </div>
+    </div>
+
+    <!-- AI Loading -->
+    <div id="mealLoadingSection" style="display:none;text-align:center;padding:24px 0">
+      <div style="font-size:32px;margin-bottom:10px">🤖</div>
+      <div style="font-size:14px;font-weight:bold;color:var(--ink);margin-bottom:4px">Analyzing your meal...</div>
+      <div style="font-size:11px;color:var(--slate)">Checking calories &amp; nutrients against your Week 24 needs</div>
+      <div style="margin-top:14px;height:4px;background:var(--blush);border-radius:4px;overflow:hidden">
+        <div class="ai-progress-bar" style="height:100%;background:linear-gradient(90deg,var(--rose),var(--rose-soft));border-radius:4px;animation:loadBar 1.8s ease-in-out infinite"></div>
+      </div>
+    </div>
+
+    <!-- AI Result -->
+    <div id="mealResultSection" style="display:none">
+      <!-- Food summary -->
+      <div id="mealResultFoodSummary" style="background:#F8FAFC;border-radius:12px;padding:12px;margin-bottom:12px;border:1px solid var(--mist)"></div>
+      <!-- Nutrition breakdown -->
+      <div id="mealResultNutrition" style="margin-bottom:12px"></div>
+      <!-- Assessment -->
+      <div id="mealResultAssessment" style="margin-bottom:16px"></div>
+
+      <div style="display:flex;gap:8px">
+        <button class="btn-outline" style="flex:1;border-color:var(--slate);color:var(--slate);font-size:12px" onclick="resetMealModal()">← Re-enter</button>
+        <button class="btn-rose" style="flex:2;font-size:12px" id="mealConfirmBtn" onclick="confirmAddMeal()">✅ Add to Meal Log</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ═══ LOGIN ═══
+  function doLogin() {
+    const email = document.getElementById('loginEmail').value;
+    const pass = document.getElementById('loginPass').value;
+    if (!email || !pass) { alert('Please enter your email and password.'); return; }
+    document.getElementById('loginPage').classList.add('hidden');
+  }
+
+  function doLogout() {
+    closeModal('modal-logout');
+    document.getElementById('loginEmail').value = '';
+    document.getElementById('loginPass').value = '';
+    document.getElementById('loginPage').classList.remove('hidden');
+  }
+
+  function togglePwd() {
+    const f = document.getElementById('loginPass');
+    f.type = f.type === 'password' ? 'text' : 'password';
+  }
+
+  // ═══ NAVIGATION ═══
+  function nav(target) {
+    document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.bnav button').forEach(el => el.classList.remove('active'));
+    document.getElementById('s-' + target).classList.add('active');
+    document.getElementById('nav-' + target).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  function openModal(id) { document.getElementById(id).classList.add('show'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+  // ═══ WEARABLE SYNC ═══
+  function syncWearable() {
+    const btn = document.getElementById('syncBtn');
+    btn.innerHTML = 'Syncing... ⏳';
+    setTimeout(() => {
+      btn.innerHTML = 'Synced ✅';
+      btn.style.color = 'var(--jade)';
+      document.getElementById('vitalsGrid').style.opacity = '0.5';
+      setTimeout(() => { document.getElementById('vitalsGrid').style.opacity = '1'; }, 300);
+    }, 1500);
+  }
+
+  // ═══ RESCHEDULE ═══
+  function saveReschedule() {
+    const d = document.getElementById('resDate').value;
+    const t = document.getElementById('resTime').value;
+    if (d && t) {
+      const dateObj = new Date(d);
+      const mths = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+      let [h, m] = t.split(':');
+      let ampm = h >= 12 ? 'PM' : 'AM';
+      h = h % 12 || 12;
+      document.getElementById('homeApptDate').innerText = `${mths[dateObj.getMonth()]} ${String(dateObj.getDate()).padStart(2,'0')}, 2026`;
+      document.getElementById('homeApptTime').innerText = `${h}:${m} ${ampm} · Antenatal Check-up`;
+      alert('Rescheduled successfully!');
+    }
+    closeModal('modal-reschedule');
+  }
+
+  // ═══ BOOK DOCTOR — full modal ═══
+  let bookingState = { doc:'', spec:'', fee:'', apptType:'Antenatal Check-up', visitMode:'🏥 In-Clinic', time:'9:00 AM' };
+
+  function openBooking(name, spec, fee, initials, color) {
+    bookingState.doc = name; bookingState.spec = spec; bookingState.fee = fee; bookingState.time = '9:00 AM';
+    document.getElementById('bookDocName').innerText = name;
+    document.getElementById('bookDocSpec').innerText = spec;
+    document.getElementById('bookDocFee').innerText = fee + ' per visit';
+    document.getElementById('bookDocAvatar').innerText = initials;
+    document.getElementById('summDoc').innerText = name;
+    document.getElementById('summFee').innerText = fee;
+    // Reset date
+    const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+1);
+    document.getElementById('bookDate').value = tomorrow.toISOString().split('T')[0];
+    updateBookingSummary();
+    openModal('modal-book');
+  }
+
+  function selectApptType(label, id) {
+    document.querySelectorAll('[id^="atype-"]').forEach(el => { el.classList.remove('chip-active'); el.classList.add('chip-default'); });
+    document.getElementById('atype-' + id).classList.add('chip-active');
+    document.getElementById('atype-' + id).classList.remove('chip-default');
+    bookingState.apptType = label;
+    updateBookingSummary();
+  }
+  function selectVisitMode(label, id) {
+    document.querySelectorAll('[id^="vmode-"]').forEach(el => { el.classList.remove('chip-active'); el.classList.add('chip-default'); });
+    document.getElementById('vmode-' + id).classList.add('chip-active');
+    document.getElementById('vmode-' + id).classList.remove('chip-default');
+    bookingState.visitMode = label;
+    updateBookingSummary();
+  }
+  function selectTimeSlot(el, time) {
+    document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+    el.classList.add('selected');
+    bookingState.time = time;
+    updateBookingSummary();
+  }
+  function updateBookingSummary() {
+    document.getElementById('summType').innerText = bookingState.apptType;
+    document.getElementById('summMode').innerText = bookingState.visitMode;
+    const d = document.getElementById('bookDate').value;
+    if (d) {
+      const dt = new Date(d);
+      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      document.getElementById('summDateTime').innerText = `${months[dt.getMonth()]} ${dt.getDate()+1}, 2026 · ${bookingState.time}`;
+    }
+  }
+  document.addEventListener('change', e => { if (e.target.id === 'bookDate') updateBookingSummary(); });
+
+  function confirmBooking() {
+    const d = document.getElementById('bookDate').value;
+    if (!d) { alert('Sila pilih tarikh.'); return; }
+    const dt = new Date(d);
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const dateStr = `${months[dt.getMonth()]} ${String(dt.getDate()+1).padStart(2,'0')}, 2026`;
+    document.getElementById('homeApptDoc').innerText = bookingState.doc;
+    document.getElementById('homeApptDate').innerText = dateStr;
+    document.getElementById('homeApptTime').innerText = `${bookingState.time} · ${bookingState.apptType}`;
+    closeModal('modal-book');
+    alert(`✅ Tempahan berjaya!\n\n${bookingState.doc}\n${dateStr} · ${bookingState.time}\n${bookingState.visitMode}`);
+    nav('home');
+  }
+
+  // ═══ FILTER DOCTORS (enhanced) ═══
+  function filterDocs(type) {
+    const search = (document.getElementById('docSearch')?.value || '').toLowerCase();
+    const spec = document.getElementById('selSpecialist')?.value || '';
+    const minRating = parseFloat(document.getElementById('selRating')?.value || '0');
+
+    // Update chips
+    if (['all','clinic','home','tele'].includes(type)) {
+      document.querySelectorAll('[id^="chip-"]').forEach(c => { c.classList.remove('chip-active'); c.classList.add('chip-default'); });
+      const chip = document.getElementById('chip-' + type);
+      if (chip) { chip.classList.add('chip-active'); chip.classList.remove('chip-default'); }
+    }
+
+    const activeChip = document.querySelector('[id^="chip-"].chip-active');
+    const visitFilter = activeChip ? activeChip.id.replace('chip-', '') : 'all';
+
+    document.querySelectorAll('.doc-card').forEach(card => {
+      const cardType = card.getAttribute('data-type');
+      const cardSpec = card.getAttribute('data-spec') || '';
+      const cardRating = parseFloat(card.getAttribute('data-rating') || '0');
+      const cardText = card.innerText.toLowerCase();
+
+      const matchVisit = visitFilter === 'all' || cardType === visitFilter;
+      const matchSpec = !spec || cardSpec.includes(spec);
+      const matchRating = !minRating || cardRating >= minRating;
+      const matchSearch = !search || cardText.includes(search);
+
+      card.style.display = (matchVisit && matchSpec && matchRating && matchSearch) ? '' : 'none';
+    });
+  }
+
+  // ═══ SCROLL TO SECTION ═══
+  function scrollToSection(id) {
+    const el = document.getElementById(id);
+    if (el) { setTimeout(() => el.scrollIntoView({behavior:'smooth', block:'start'}), 100); }
+  }
+
+  // ═══ MEAL TABS ═══
+  function switchMealTab(tab) {
+    ['harini','rancangan','pantang'].forEach(t => {
+      document.getElementById('tab-' + t).classList.remove('active');
+      document.getElementById('meal-' + t).style.display = 'none';
+    });
+    document.getElementById('tab-' + tab).classList.add('active');
+    document.getElementById('meal-' + tab).style.display = 'block';
+  }
+
+  // ═══ BOOK DOCTOR (legacy, now delegates to openBooking) ═══
+  function bookDoc(name, dateStr, timeStr) {
+    openBooking(name, 'O&G Specialist', 'RM 80', name.split(' ').map(w=>w[0]).join('').substring(0,2), 'rose');
+  }
+
+  // ═══ HOME AI CHAT (Claude API) ═══
+  function homeAsk(question) {
+    document.getElementById('homeChatInput').value = question;
+    sendHomeChat();
+  }
+
+  async function sendHomeChat() {
+    const inp = document.getElementById('homeChatInput');
+    const msg = inp.value.trim();
+    if (!msg) return;
+    const box = document.getElementById('homeChatBox');
+    box.innerHTML += `<div class="chat-msg chat-user" style="background:var(--rose)">${msg}</div>`;
+    inp.value = '';
+    box.scrollTop = box.scrollHeight;
+
+    const typingId = 'typing-' + Date.now();
+    box.innerHTML += `<div class="chat-msg chat-ai" id="${typingId}" style="color:var(--rose);background:var(--blush);border-color:var(--peach)">Thinking... 🤔</div>`;
+    box.scrollTop = box.scrollHeight;
+
+    try {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 1000,
+          system: `You are a warm, caring AI maternity assistant inside GrabDoctor Maternal App. The patient is Sarah Lee, currently at Week 24 of pregnancy (Second Trimester). Her today's vitals: Blood Pressure 118/76 mmHg (Normal), Heart Rate 82 bpm (Normal), Weight 62.4 kg (On Track), Baby Kicks 12 (Healthy). Her O&G specialist is Dr. Aisha Rahman at KPJ Damansara. Next appointment: May 8, 2026. She is Malaysian.
+
+Provide warm, concise, medically accurate pregnancy advice. Keep responses under 80 words. Use 1-2 emojis. Always recommend consulting Dr. Aisha for serious concerns. Never diagnose. Respond in whichever language the user writes (English or Bahasa Malaysia).`,
+          messages: [{ role: "user", content: msg }]
+        })
+      });
+      const data = await response.json();
+      const reply = data.content[0].text;
+      document.getElementById(typingId).remove();
+      box.innerHTML += `<div class="chat-msg chat-ai" style="color:var(--rose);background:var(--blush);border-color:var(--peach)">${reply}</div>`;
+    } catch (err) {
+      document.getElementById(typingId).innerText = 'Sorry, I\'m having trouble connecting. Please try again! 🌸';
+    }
+    box.scrollTop = box.scrollHeight;
+  }
+
+  // ═══ PDF REPORT READER (Claude API) ═══
+  async function analyzeReportWithAI(reportText, fileName) {
+    document.getElementById('pdfFileName').innerText = fileName;
+    document.getElementById('pdfAnalysis').innerHTML = '🔄 AI is analyzing your report…';
+    document.getElementById('pdfResult').style.display = 'block';
+    const hist = document.getElementById('reportHistory');
+    hist.innerHTML = `<li style="background:var(--white);padding:8px;border-radius:6px;border:1px solid var(--blush);cursor:pointer">📄 ${fileName} (Analyzing...) <span style="float:right">⏳</span></li>` + hist.innerHTML;
+
+    try {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 1000,
+          system: `You are a maternal health AI analyzing a lab report for a pregnant patient at Week 24 (Second Trimester). For each lab value: state the name, value, normal range, and a one-word status (Normal ✅ / Low ⚠️ / High ⚠️ / Critical ❌). Format as bullet points. End with a 2-sentence plain-English summary and one recommendation. Be concise and caring.`,
+          messages: [{ role: "user", content: `Please analyze this blood test report:\n\n${reportText}` }]
+        })
+      });
+      const data = await response.json();
+      document.getElementById('pdfAnalysis').innerHTML = data.content[0].text.replace(/\n/g, '<br>');
+      hist.querySelector('li').innerHTML = `📄 ${fileName} (Analyzed) <span style="float:right;color:var(--jade)">✅</span>`;
+    } catch (err) {
+      document.getElementById('pdfAnalysis').innerHTML = '❌ Unable to reach AI. Please check connection and try again.';
+    }
+  }
+
+  function handlePDFUpload() {
+    const file = document.getElementById('reportInput').files[0];
+    if (!file) return;
+    // Simulate extracted text from the uploaded PDF
+    const simulatedText = `Patient: Sarah Lee | Week 24 Pregnancy\nHemoglobin: 11.8 g/dL | Fasting Glucose: 4.6 mmol/L | WBC: 8.2 × 10³/µL | Ferritin: 14 ng/mL | Platelet: 198 × 10³/µL | Urine Protein: Negative`;
+    analyzeReportWithAI(simulatedText, file.name);
+  }
+
+  function loadSampleReport() {
+    const sampleText = `Patient: Sarah Lee | Week 24 Pregnancy
+Hemoglobin: 11.5 g/dL (Normal: 11–14 g/dL)
+Fasting Glucose: 4.8 mmol/L (Normal: <5.3)
+Platelet Count: 210 × 10³/µL (Normal: 150–400)
+Serum Iron: 72 µg/dL (Normal: 60–170, Optimal: 90+)
+Folic Acid: 12.4 nmol/L (Normal: >6)
+TSH (Thyroid): 1.8 mU/L (Normal: 0.5–4.5)
+Urine Protein: Negative
+Rubella IgG: Immune`;
+    analyzeReportWithAI(sampleText, 'AntenatalBloodPanel_Week24.pdf');
+  }
+
+  function showSavedReport(name) {
+    document.getElementById('pdfFileName').innerText = name;
+    document.getElementById('pdfAnalysis').innerHTML = `
+      • <strong>Hemoglobin:</strong> 11.5 g/dL <span style="color:var(--jade)">✅ Normal</span><br>
+      • <strong>Fasting Glucose:</strong> 4.8 mmol/L <span style="color:var(--jade)">✅ Normal</span><br>
+      • <strong>Platelet Count:</strong> 210 × 10³/µL <span style="color:var(--jade)">✅ Normal</span><br>
+      • <strong>Serum Iron:</strong> 72 µg/dL <span style="color:var(--amber)">⚠️ Slightly Low</span><br><br>
+      <em style="color:#15803D">📝 Overall great for Week 24. Consider iron-rich foods as advised by Dr. Aisha.</em>
+    `;
+    document.getElementById('pdfResult').style.display = 'block';
+  }
+
+  // ═══ DELIVERY ═══
+  function openDelivModal() {
+    // Populate live date/time fields
+    const now = new Date();
+    const eta = new Date(now.getTime() + 45 * 60000);
+    const fmt = d => d.toLocaleTimeString('en-MY', {hour:'2-digit', minute:'2-digit'});
+    const fmtDate = d => d.toLocaleDateString('en-MY', {day:'numeric', month:'long', year:'numeric'});
+    document.getElementById('delivOrderDate').innerText = fmtDate(now);
+    document.getElementById('delivOrderTime').innerText = fmt(now);
+    document.getElementById('delivETA').innerText = fmt(eta) + ' (≈ 45 mins)';
+    document.getElementById('delivETA2').innerText = 'Est. arrival by ' + fmt(eta);
+    document.getElementById('stepOrderTime').innerText = fmtDate(now) + ' · ' + fmt(now);
+    openModal('modal-delivery');
+  }
+  function confirmDeliv() {
+    const payment = document.getElementById('delivPayment')?.value || 'GrabPay';
+    closeModal('modal-delivery');
+    alert(`✅ Payment Successful!\n\nYour medication is being packed by the pharmacist.\nTracking ID: GM-889012\nPayment: ${payment}\n\nGrabMart driver will be assigned shortly. 🛵`);
+  }
+
+  // ═══ FILTER PANEL TOGGLE ═══
+  function toggleFilterPanel() {
+    const p = document.getElementById('filterPanel');
+    p.style.display = p.style.display === 'none' ? 'block' : 'none';
+  }
+
+  // ═══ AI MEAL ANALYZER ═══
+  let pendingMealData = {};
+
+  async function analyzeMealWithAI() {
+    const type = document.getElementById('mealType').value;
+    const desc = document.getElementById('mealDesc').value.trim();
+    const qty  = document.getElementById('mealQty').value.trim();
+    const time = document.getElementById('mealTime').value;
+    if (!desc) { alert('Please describe what you ate.'); return; }
+    if (!qty)  { alert('Please enter the quantity or serving size.'); return; }
+
+    pendingMealData = { type, desc, qty, time };
+
+    // Show loading, hide input
+    document.getElementById('mealInputSection').style.display = 'none';
+    document.getElementById('mealLoadingSection').style.display = 'block';
+    document.getElementById('mealResultSection').style.display = 'none';
+
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          system: `You are a maternal nutrition AI assistant. The patient is Sarah Lee, Week 24 of pregnancy (Second Trimester).
+
+Her daily nutritional targets (Week 24):
+- Calories: 2,200 kcal/day
+- Protein: 71g/day  
+- Iron: 27mg/day (currently low at 18mg)
+- Calcium: 1,000mg/day
+- Folic Acid: 600mcg/day
+- DHA/Omega-3: 200mg/day
+- Fibre: 28g/day
+
+Her latest blood report showed: Hemoglobin 11.5 g/dL (slightly low), Serum Iron 72 µg/dL (slightly low), Ferritin 14 ng/mL (below optimal).
+
+Analyze the meal described and respond ONLY in this exact JSON format (no markdown, no extra text):
+{
+  "food_name": "short display name",
+  "calories": 000,
+  "protein_g": 00,
+  "iron_mg": 0.0,
+  "calcium_mg": 000,
+  "folate_mcg": 000,
+  "fibre_g": 0.0,
+  "dha_mg": 0,
+  "status": "adequate" or "needs_more",
+  "status_reason": "one sentence why",
+  "recommendation": "one actionable sentence for what to add or keep doing",
+  "keep_it_on": true or false
+}`,
+          messages: [{
+            role: 'user',
+            content: `Meal type: ${type}\nFood: ${desc}\nQuantity: ${qty}`
+          }]
+        })
+      });
+
+      const data = await response.json();
+      let raw = data.content[0].text.trim();
+      // Strip possible markdown fences
+      raw = raw.replace(/```json|```/g, '').trim();
+      const result = JSON.parse(raw);
+      pendingMealData.aiResult = result;
+      showMealResult(result, type, desc, qty, time);
+
+    } catch (err) {
+      // Fallback if API fails
+      document.getElementById('mealLoadingSection').style.display = 'none';
+      document.getElementById('mealInputSection').style.display = 'block';
+      alert('⚠️ AI analysis unavailable. Please check your connection and try again.');
+    }
+  }
+
+  function showMealResult(r, type, desc, qty, time) {
+    document.getElementById('mealLoadingSection').style.display = 'none';
+    document.getElementById('mealResultSection').style.display = 'block';
+
+    // Food summary
+    const icons = {Breakfast:'☀️','Morning Snack':'🍎',Lunch:'🌤','Afternoon Snack':'🍊',Dinner:'🌙',Supper:'🌜'};
+    document.getElementById('mealResultFoodSummary').innerHTML = `
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <span style="font-size:24px">${icons[type]||'🍽'}</span>
+        <div>
+          <div style="font-size:13px;font-weight:bold;color:var(--ink)">${r.food_name || desc}</div>
+          <div style="font-size:11px;color:var(--slate)">${type} · ${qty}${time ? ' · ' + time : ''}</div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:center">
+        <div style="font-size:26px;font-weight:bold;color:var(--rose)">${r.calories} <span style="font-size:13px;color:var(--slate);font-weight:normal">kcal</span></div>
+      </div>`;
+
+    // Nutrition grid
+    document.getElementById('mealResultNutrition').innerHTML = `
+      <div style="font-size:11px;font-weight:700;color:var(--ink);margin-bottom:6px">📊 Nutrient Breakdown</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+        ${nutriBadge('Protein', r.protein_g + 'g', r.protein_g >= 12 ? 'good' : 'low')}
+        ${nutriBadge('Iron', r.iron_mg + 'mg', r.iron_mg >= 5 ? 'good' : 'low')}
+        ${nutriBadge('Calcium', r.calcium_mg + 'mg', r.calcium_mg >= 200 ? 'good' : 'low')}
+        ${nutriBadge('Folate', r.folate_mcg + 'mcg', r.folate_mcg >= 100 ? 'good' : 'low')}
+        ${nutriBadge('Fibre', r.fibre_g + 'g', r.fibre_g >= 3 ? 'good' : 'low')}
+        ${nutriBadge('DHA', r.dha_mg + 'mg', r.dha_mg >= 30 ? 'good' : 'low')}
+      </div>`;
+
+    // Assessment card
+    const isAdequate = r.status === 'adequate' || r.keep_it_on === true;
+    document.getElementById('mealResultAssessment').innerHTML = isAdequate
+      ? `<div style="background:linear-gradient(135deg,#F0FDF4,#DCFCE7);border-radius:12px;padding:12px;border:1px solid #BBF7D0">
+           <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+             <span style="font-size:20px">✅</span>
+             <div style="font-size:13px;font-weight:bold;color:#15803D">Great Choice — Keep It On!</div>
+           </div>
+           <div style="font-size:11px;color:#166534;line-height:1.6">${r.status_reason}</div>
+           <div style="margin-top:8px;font-size:11px;color:#15803D;font-style:italic">💡 ${r.recommendation}</div>
+         </div>`
+      : `<div style="background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border-radius:12px;padding:12px;border:1px solid #FCD34D">
+           <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+             <span style="font-size:20px">⚠️</span>
+             <div style="font-size:13px;font-weight:bold;color:#92400E">Nutrition Needs Attention</div>
+           </div>
+           <div style="font-size:11px;color:#78350F;line-height:1.6">${r.status_reason}</div>
+           <div style="margin-top:8px;background:#FFF7ED;border-radius:8px;padding:8px;border:1px solid #FCD34D">
+             <div style="font-size:10px;font-weight:bold;color:#92400E;margin-bottom:4px">💊 Recommendation</div>
+             <div style="font-size:11px;color:#78350F;line-height:1.6">${r.recommendation}</div>
+           </div>
+         </div>`;
+  }
+
+  function nutriBadge(label, value, level) {
+    const bg   = level === 'good' ? '#F0FDF4' : '#FEF3C7';
+    const col  = level === 'good' ? '#15803D' : '#92400E';
+    const icon = level === 'good' ? '✅' : '⚠️';
+    return `<div style="background:${bg};border-radius:8px;padding:8px;text-align:center">
+      <div style="font-size:11px;font-weight:bold;color:${col}">${icon} ${value}</div>
+      <div style="font-size:9px;color:var(--slate)">${label}</div>
+    </div>`;
+  }
+
+  function resetMealModal() {
+    document.getElementById('mealInputSection').style.display = 'block';
+    document.getElementById('mealLoadingSection').style.display = 'none';
+    document.getElementById('mealResultSection').style.display = 'none';
+    document.getElementById('mealDesc').value = '';
+    document.getElementById('mealQty').value = '';
+    document.getElementById('mealTime').value = '';
+    pendingMealData = {};
+  }
+
+  let totalKcal = 1640;
+  function confirmAddMeal() {
+    const { type, desc, qty, time, aiResult } = pendingMealData;
+    if (!desc) return;
+    const kcal = aiResult?.calories || 0;
+    totalKcal += kcal;
+
+    // Insert new meal section into the Hari Ini tab
+    const pad = document.querySelector('#meal-harini');
+    const aiCadangan = pad.querySelector('[style*="FFFBEB"]');
+    const icons = {Breakfast:'☀️','Morning Snack':'🍎',Lunch:'🌤','Afternoon Snack':'🍊',Dinner:'🌙',Supper:'🌜'};
+    const newSection = document.createElement('div');
+    newSection.className = 'meal-section';
+    newSection.innerHTML = `
+      <div class="meal-section-hdr">
+        <span style="font-size:18px">${icons[type]||'🍽'}</span>
+        <div>
+          <div style="font-size:12px;font-weight:bold;color:#B45309;font-family:sans-serif">${type.toUpperCase()}</div>
+          <div style="font-size:10px;color:var(--slate);font-family:sans-serif">${time || '—'} · ${kcal} kcal</div>
+        </div>
+      </div>
+      <div class="food-item" style="border-bottom:none">
+        <div style="display:flex;align-items:center;gap:10px;flex:1">
+          <div class="food-emoji" style="background:#F8FAFC">🍽</div>
+          <div style="font-family:sans-serif">
+            <div style="font-size:12px;font-weight:600;color:var(--ink)">${desc}</div>
+            <div style="font-size:10px;color:var(--slate)">${qty} · ${aiResult ? `Protein ${aiResult.protein_g}g · Iron ${aiResult.iron_mg}mg` : ''}</div>
+          </div>
+        </div>
+      </div>`;
+    pad.insertBefore(newSection, aiCadangan);
+
+    // Update calorie summary
+    const pct = Math.min(Math.round(totalKcal / 2200 * 100), 100);
+    const calEl = document.getElementById('mCalEaten');
+    if (calEl) calEl.innerText = totalKcal.toLocaleString();
+    const pctEl = document.getElementById('mCalPct');
+    if (pctEl) pctEl.innerText = pct + '%';
+
+    closeModal('modal-addmeal');
+    nav('meals');
+    resetMealModal();
+  }
+
+  // ═══ PROFILE EDIT ═══
+  function saveProf() {
+    const n = document.getElementById('inpName').value;
+    const p = document.getElementById('inpPhone').value;
+    if (!n) { alert('Name cannot be empty!'); return; }
+    document.getElementById('profName').innerText = n;
+    document.getElementById('profPhone').innerText = p;
+    
+    // Sync initials
+    const parts = n.trim().split(' ');
+    const initials = parts.map(w => w[0]).join('').substring(0, 2).toUpperCase();
+    document.getElementById('profPicInitials').innerText = initials;
+    document.getElementById('headerAvatar').innerText = initials;
+
+    // Sync greeting
+    const firstName = parts[0];
+    const dict = langDict[document.getElementById('langSel').value];
+    document.getElementById('greetName').innerText = `${dict.greet}, ${firstName} 🌸`;
+    
+    closeModal('modal-edit');
+  }
+
+  // ═══ PROFILE PIC ═══
+  function triggerPicUpload() {
+    document.getElementById('picInput').click();
+  }
+  function changePic() {
+    const file = document.getElementById('picInput').files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        document.getElementById('profPicImg').src = e.target.result;
+        document.getElementById('profPicImg').style.display = 'block';
+        document.getElementById('profPicInitials').style.display = 'none';
+        // Update header avatar with img
+        document.getElementById('headerAvatar').style.backgroundImage = `url(${e.target.result})`;
+        document.getElementById('headerAvatar').style.backgroundSize = 'cover';
+        document.getElementById('headerAvatar').style.backgroundPosition = 'center';
+        document.getElementById('headerAvatar').innerText = '';
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // ═══ PRIVACY T&C ═══
+  let tcChecked = false;
+  function toggleTC() {
+    tcChecked = !tcChecked;
+    document.getElementById('tcBox').innerText = tcChecked ? '✅' : '';
+    document.getElementById('privacySaveBtn').style.opacity = tcChecked ? '1' : '.5';
+  }
+  function savePrivacy() {
+    if (!tcChecked) { alert('Please agree to the Terms & Conditions to save.'); return; }
+    closeModal('modal-privacy');
+    alert('Privacy settings saved!');
+  }
+
+  // ═══ FAMILY SYNC ═══
+  function sendFamilyUpdate() {
+    const msg = encodeURIComponent(
+      `🌸 *Sarah's Daily Maternal Update — Week 24*\n\n` +
+      `🩺 Blood Pressure: 118/76 ✅ Normal\n` +
+      `❤️ Heart Rate: 82 bpm ✅ Normal\n` +
+      `⚖️ Weight: 62.4 kg ✅ On Track\n` +
+      `🦶 Baby Kicks: 12 today ✅ Healthy\n\n` +
+      `📅 Next Appointment: May 08, 2026 with Dr. Aisha Rahman\n\n` +
+      `_Sent via GrabDoctor Maternal App_ 🤰`
+    );
+    window.open(`https://wa.me/?text=${msg}`, '_blank');
+  }
+  function addFamilyMember() {
+    const num = prompt('Enter family member\'s WhatsApp number (e.g. +60 12-345 6789):');
+    if (num) alert(`Invite sent to ${num} via WhatsApp!`);
+  }
+
+  // ═══ SECURITY ═══
+  function saveSecurity() {
+    const newPwd = document.getElementById('secNewPwd').value;
+    const confPwd = document.getElementById('secConfPwd').value;
+    const newEmail = document.getElementById('secNewEmail').value;
+    if (newPwd && newPwd !== confPwd) { alert('Passwords do not match!'); return; }
+    if (newPwd && newPwd.length < 8) { alert('Password must be at least 8 characters.'); return; }
+    closeModal('modal-security');
+    alert('Security settings updated successfully!');
+  }
+
+  // ═══ KICK COUNTER ═══
+  let kickData = { count: 0, startTime: null };
+  function recordKick() {
+    if (!kickData.startTime) kickData.startTime = Date.now();
+    kickData.count++;
+    document.getElementById('kickCount').innerText = kickData.count;
+    const elapsed = Math.floor((Date.now() - kickData.startTime) / 60000);
+    document.getElementById('kickTimerDisplay').innerText = `Session started ${elapsed} min ago`;
+    const status = document.getElementById('kickStatus');
+    if (kickData.count >= 10) {
+      status.innerHTML = `<span style="color:var(--jade);font-weight:bold">✅ Target reached! Great job, baby is active.</span>`;
+    } else {
+      status.innerText = `${10 - kickData.count} more kick${10 - kickData.count !== 1 ? 's' : ''} to reach today's target`;
+    }
+    // Pulse animation
+    const btn = document.querySelector('[onclick="recordKick()"]');
+    btn.style.transform = 'scale(0.93)';
+    setTimeout(() => btn.style.transform = 'scale(1)', 150);
+  }
+  function resetKicks() {
+    kickData = { count: 0, startTime: null };
+    document.getElementById('kickCount').innerText = '0';
+    document.getElementById('kickStatus').innerText = '';
+    document.getElementById('kickTimerDisplay').innerText = '';
+  }
+
+  // ═══ TRIMESTER COLLAPSIBLE ═══
+  function toggleSection(id) {
+    const el = document.getElementById(id);
+    const arrow = document.getElementById(id + 'arrow');
+    if (el.style.display === 'none') { el.style.display = 'block'; arrow.innerText = '▴'; }
+    else { el.style.display = 'none'; arrow.innerText = '▾'; }
+  }
+
+  // ═══ WATER TRACKER ═══
+  let waterGlasses = 6; // 6 × 250ml = 1.5 L
+  function renderWaterGlasses() {
+    const container = document.getElementById('waterGlasses');
+    if (!container) return;
+    container.innerHTML = '';
+    for (let i = 1; i <= 10; i++) {
+      const filled = i <= waterGlasses;
+      const glass = document.createElement('div');
+      glass.style.cssText = `width:22px;height:28px;border-radius:4px 4px 6px 6px;border:2px solid ${filled ? '#3B82F6' : '#CBD5E1'};background:${filled ? 'linear-gradient(180deg,#BFDBFE,#3B82F6)' : '#F8FAFC'};cursor:pointer;transition:all .2s`;
+      glass.title = `${i * 250}ml`;
+      glass.onclick = () => { waterGlasses = i; renderWaterGlasses(); updateWaterDisplay(); };
+      container.appendChild(glass);
+    }
+  }
+  function adjustWater(delta) {
+    waterGlasses = Math.max(0, Math.min(10, waterGlasses + delta));
+    renderWaterGlasses();
+    updateWaterDisplay();
+  }
+  function updateWaterDisplay() {
+    const liters = (waterGlasses * 0.25).toFixed(1);
+    const el = document.getElementById('waterDisplay');
+    if (el) el.innerText = `${liters} / 2.5 L`;
+  }
+  // Init water glasses when Meals tab is viewed
+  document.addEventListener('DOMContentLoaded', renderWaterGlasses);
+  setTimeout(renderWaterGlasses, 100);
+
+  // ═══ LOG VITALS ═══
+  function saveVitals() {
+    const sys = document.getElementById('vitalSystolic').value;
+    const dia = document.getElementById('vitalDiastolic').value;
+    const hr  = document.getElementById('vitalHR').value;
+    const wt  = document.getElementById('vitalWeight').value;
+    const kk  = document.getElementById('vitalKicks').value;
+    if (!sys || !dia) { alert('Please enter your blood pressure.'); return; }
+    // Update the vitals grid cards
+    const cards = document.querySelectorAll('#vitalsGrid .card');
+    if (sys && dia) cards[0].querySelector('div > div:first-child').innerText = `${sys}/${dia}`;
+    if (hr) cards[1].querySelector('div > div:first-child').innerText = `${hr}`;
+    if (wt) cards[2].querySelector('div > div:first-child').innerText = wt;
+    if (kk) {
+      cards[3].querySelector('div > div:first-child').innerText = kk;
+      if (parseInt(kk) >= 10) cards[3].querySelector('.vital-range').className = 'vital-range range-normal';
+    }
+    closeModal('modal-logvitals');
+    alert('✅ Vitals updated successfully!');
+  }
+
+
+
+  const langDict = {
+    en: {
+      loc:"📍 Kuala Lumpur", greet:"Good Morning", tri:"Second Trimester", week:"Week 24",
+      vitals:"📊 Today's Vitals", nextAppt:"📅 Next Appointment", track:"Track", resched:"Reschedule",
+      docTitle:"Find Your Doctor 🩺", aiReader:"📄 AI Report Reader", uploadBtn:"+ Upload New PDF Report", hist:"History:",
+      medTitle:"💊 E-Prescription & Delivery", orderBtn:"Order Delivery (RM 45)", docs:"👩‍⚕️ Nearby Doctors",
+      mealTitle:"Meal Plan 🍱", dailyTar:"Daily Targets (2nd Trimester)", mealLog:"Today's Meal Log",
+      edit:"Edit", lang:"App Language", notif:"Notifications", device:"Connected Devices", priv:"Privacy & Health Data", log:"Log Out",
+      navHome:"Home", navDoc:"GrabDoc", navIbu:"Ibu Sihat", navMeal:"Meals", navProf:"Profile",
+      mealHdrLabel:"MEALS", mealPlan:"Meal Plan", mealToday:"Today", mealPantang:"Modern Confinement",
+      calorieSummary:"Calorie Summary", mealLogToday:"Today's Meal Log",
+      macroCarbs:"Carbohydrates 38%", macroProtein:"Protein 26%", macroFat:"Fat 19%", macroFiber:"Fiber 17%",
+      labelCalcium:"Calcium", labelIron:"Iron", labelFolicAcid:"Folic Acid",
+      waterLabel:"💧 Water Intake", waterHint:"Each glass = 250ml · Target: 10 glasses (2.5L)",
+      addMealBtn:"+ Add", breakfastLbl:"BREAKFAST", lunchLbl:"LUNCH",
+      aiNutrTitle:"AI NUTRITION SUGGESTIONS",
+      aiNutrBody:"You still need <strong>560 kcal</strong> for today. Suggest adding more <strong>iron</strong> (spinach/chicken liver) at dinner — current level 18mg, target 27mg/day for 3rd trimester. Drink <strong>1–2 more glasses of water</strong> before bed.",
+      logDinnerBtn:"+ Log Dinner / Snack",
+      avoidTitle:"🚫 Foods to Avoid (Week 24)",
+      avoidRawSushi:"Raw Sushi", avoidCheese:"Unpasteurised Cheese", avoidFish:"High Mercury Fish",
+      avoidDeli:"Deli Meats", avoidCaffeine:"Excess Caffeine", avoidAlcohol:"Alcohol",
+      weeklyPlanTitle:"Weekly Meal Plan",
+      weeklyPlanSub:"A 7-day meal plan customised for your second trimester.",
+      genPlanBtn:"Generate My Plan",
+      nutriTipsTitle:"💡 Trimester 2 Nutrition Tips",
+      pantangTitle:"🌺 Modern Confinement: Mother's Guide",
+      pantangSub:"Evidence-based guide combining Malay traditions with modern care.",
+      pantangEatTitle:"✅ Recommended Foods",
+      pantangFish:"Haruan & Catfish", pantangFishSub:"Aids healing, rich in protein",
+      pantangGinger:"Ginger & Turmeric", pantangGingerSub:"Natural anti-inflammatory, improves blood circulation",
+      pantangVeg:"Spinach & Kangkung", pantangVegSub:"Rich in iron & folate, good for recovery",
+      pantangAvoidTitle:"🚫 Avoid During Confinement",
+      pantangAvoid1:"❌ Excessive cold food or ice",
+      pantangAvoid2:"❌ Excessive sour foods (vinegar, tamarind)",
+      pantangAvoid3:"❌ Seafood like prawns & squid (early trimester)",
+      pantangAvoid4:"❌ Excessive spicy food",
+      // Book Appointment modal
+      bookApptTypeLabel:"Appointment Type", bookVisitModeLabel:"Visit Mode",
+      bookDateLabel:"Date", bookTimeLabel:"Time", bookNotesLabel:"Notes (Optional)",
+      bookPayLabel:"Payment Method", bookSummaryTitle:"📋 Booking Summary",
+      bookSummDocLbl:"Doctor", bookSummTypeLbl:"Type", bookSummModeLbl:"Mode",
+      bookSummDateLbl:"Date & Time", bookTotalLbl:"Total",
+      bookCancelBtn:"Cancel", bookConfirmBtn:"✅ Confirm Booking",
+      // Meal log serving sizes & nutrient labels
+      nutriCarbs:"Carbohydrates", macroFiber2:"Fiber",
+      servServing:"1 serving", servEgg:"2 pcs", servGlass:"1 glass",
+      servPiece:"1 piece", servBowl:"1 bowl", servPlate:"1 plate"
+    },
+    bm: {
+      loc:"📍 Kuala Lumpur", greet:"Selamat Pagi", tri:"Trimester Kedua", week:"Minggu 24",
+      vitals:"📊 Vitals Hari Ini", nextAppt:"📅 Temujanji Seterusnya", track:"Jejak", resched:"Jadual Semula",
+      docTitle:"Cari Doktor Anda 🩺", aiReader:"📄 Pembaca Laporan AI", uploadBtn:"+ Muat Naik PDF Baru", hist:"Sejarah:",
+      medTitle:"💊 E-Preskripsi & Penghantaran", orderBtn:"Pesan Penghantaran (RM 45)", docs:"👩‍⚕️ Doktor Berdekatan",
+      mealTitle:"Pelan Makanan 🍱", dailyTar:"Sasaran Harian (Trimester 2)", mealLog:"Log Makanan Hari Ini",
+      edit:"Sunting", lang:"Bahasa Aplikasi", notif:"Notifikasi", device:"Peranti Bersambung", priv:"Privasi & Data Kesihatan", log:"Log Keluar",
+      navHome:"Utama", navDoc:"GrabDoc", navIbu:"Ibu Sihat", navMeal:"Makanan", navProf:"Profil",
+      mealHdrLabel:"PEMAKANAN", mealPlan:"Rancangan Makan", mealToday:"Hari Ini", mealPantang:"Pantang Moden",
+      calorieSummary:"Ringkasan Kalori", mealLogToday:"Log Makanan Hari Ini",
+      macroCarbs:"Karbohidrat 38%", macroProtein:"Protein 26%", macroFat:"Lemak 19%", macroFiber:"Serat 17%",
+      labelCalcium:"Kalsium", labelIron:"Zat Besi", labelFolicAcid:"Asid Folik",
+      waterLabel:"💧 Air Minum", waterHint:"Setiap gelas = 250ml · Sasaran: 10 gelas (2.5L)",
+      addMealBtn:"+ Tambah", breakfastLbl:"SARAPAN", lunchLbl:"MAKAN TENGAH HARI",
+      aiNutrTitle:"CADANGAN AI PEMAKANAN",
+      aiNutrBody:"Anda masih perlu <strong>560 kcal</strong> lagi untuk hari ini. Cadangkan tambah <strong>zat besi</strong> (bayam/hati ayam) di makan malam — tahap semasa 18mg, sasaran 27mg/hari untuk trimester 3. Minum <strong>1–2 gelas air</strong> lagi sebelum tidur.",
+      logDinnerBtn:"+ Log Makanan Malam / Snek",
+      avoidTitle:"🚫 Makanan Pantang (Minggu 24)",
+      avoidRawSushi:"Sushi mentah", avoidCheese:"Keju tidak pasteur", avoidFish:"Ikan merkuri tinggi",
+      avoidDeli:"Daging deli", avoidCaffeine:"Kafein berlebihan", avoidAlcohol:"Alkohol",
+      weeklyPlanTitle:"Rancangan Makan Mingguan",
+      weeklyPlanSub:"Pelan makan 7 hari yang disesuaikan untuk trimester kedua anda.",
+      genPlanBtn:"Jana Pelan Saya",
+      nutriTipsTitle:"💡 Tips Pemakanan Trimester 2",
+      pantangTitle:"🌺 Pantang Moden: Panduan Ibu",
+      pantangSub:"Panduan berasaskan bukti saintifik yang menggabungkan tradisi Melayu dengan penjagaan moden.",
+      pantangEatTitle:"✅ Makanan Digalakkan",
+      pantangFish:"Ikan haruan & ikan keli", pantangFishSub:"Membantu proses penyembuhan, kaya protein",
+      pantangGinger:"Halia & kunyit", pantangGingerSub:"Anti-radang semula jadi, melancarkan peredaran darah",
+      pantangVeg:"Sayur bayam & kangkung", pantangVegSub:"Kaya zat besi & folat, baik untuk pemulihan",
+      pantangAvoidTitle:"🚫 Elakkan Semasa Berpantang",
+      pantangAvoid1:"❌ Makanan sejuk atau ais berlebihan",
+      pantangAvoid2:"❌ Makanan masam berlebihan (cuka, asam)",
+      pantangAvoid3:"❌ Seafood seperti udang & sotong (trimester awal)",
+      pantangAvoid4:"❌ Makanan pedas berlebihan",
+      // Book Appointment modal
+      bookApptTypeLabel:"Jenis Temujanji", bookVisitModeLabel:"Mod Lawatan",
+      bookDateLabel:"Tarikh", bookTimeLabel:"Masa", bookNotesLabel:"Nota (Pilihan)",
+      bookPayLabel:"Kaedah Bayaran", bookSummaryTitle:"📋 Ringkasan Tempahan",
+      bookSummDocLbl:"Doktor", bookSummTypeLbl:"Jenis", bookSummModeLbl:"Mod",
+      bookSummDateLbl:"Tarikh & Masa", bookTotalLbl:"Jumlah",
+      bookCancelBtn:"Batal", bookConfirmBtn:"✅ Sahkan Tempahan",
+      // Meal log serving sizes & nutrient labels
+      nutriCarbs:"Karbohidrat", macroFiber2:"Serat",
+      servServing:"1 hidangan", servEgg:"2 biji", servGlass:"1 gelas",
+      servPiece:"1 potong", servBowl:"1 mangkuk", servPlate:"1 pinggan"
+    }
+  };
+
+  function changeLang() {
+    const l = document.getElementById('langSel').value;
+    const d = langDict[l];
+    // Update plain-text elements
+    document.querySelectorAll('[data-tr]').forEach(el => {
+      const k = el.getAttribute('data-tr');
+      if (k === 'greet') {
+        const nm = document.getElementById('profName').innerText.split(' ')[0];
+        el.innerText = `${d[k]}, ${nm} 🌸`;
+      } else if (d[k]) {
+        el.innerText = d[k];
+      }
+    });
+    // Update HTML-rich elements (data-tr-html)
+    document.querySelectorAll('[data-tr-html]').forEach(el => {
+      const k = el.getAttribute('data-tr-html');
+      if (d[k]) el.innerHTML = d[k];
+    });
+    // Update meal date in the correct locale
+    const mealDateEl = document.getElementById('mealDate');
+    if (mealDateEl) {
+      const locale = l === 'bm' ? 'ms-MY' : 'en-GB';
+      mealDateEl.innerText = new Date().toLocaleDateString(locale, { weekday:'long', day:'2-digit', month:'long', year:'numeric' });
+    }
+  }
+</script>
+</body>
+</html>
