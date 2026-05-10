@@ -35,11 +35,13 @@ Bahasa Malaysia) mobile platform:
 7. 👨‍👩‍👧 Family Sync
    Share pregnancy updates and health data with your partner and family.
 
-🔗 Live Demo
-Click here to view the app
+🔗 Live URL
+https://wonghhhhh.github.io/nexmum-app/
+*Anthropic API Key (must insert at the log in page)
 
 📹 Demo Video
-Watch 2-min demo
+https://drive.google.com/file/d/1z7LmFM6I2kfGdnMswsvuZKpTiYbqlwAI/view?usp=drive_link
 
 👥 Team
 Elvis Tan Jun Ming, Wong Ze-An, Doris Ooi Yi Fei, Ong Jun Kit
+Dr Vernoon Ang Wei Neng (Advisor)
