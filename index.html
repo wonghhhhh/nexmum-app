@@ -16,29 +16,29 @@
   .screen{display:none;padding-bottom:90px;animation:fadeUp .3s ease}
   .screen.active{display:block}
   @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-  
+
   .hdr{padding:52px 20px 24px;position:relative;overflow:hidden;border-bottom-left-radius:20px;border-bottom-right-radius:20px;margin-bottom:12px}
   .hdr-rose{background:linear-gradient(160deg,var(--rose) 0%,var(--rose-soft) 55%,var(--peach) 100%)}
   .hdr-teal{background:linear-gradient(160deg,var(--teal),var(--teal-soft))}
   .hdr-jade{background:linear-gradient(160deg,#16A34A,#4ADE80)}
   .hdr-amber{background:linear-gradient(160deg,var(--amber),#FCD34D)}
   .hdr-blue{background:linear-gradient(160deg,#3B82F6,#93C5FD)}
-  
+
   .hdr-label{font-size:10px;color:rgba(255,255,255,.8);font-family:sans-serif;letter-spacing:2px;text-transform:uppercase}
   .hdr-title{font-size:20px;font-weight:bold;color:#fff;margin-top:4px}
   .hdr-sub{font-size:12px;color:rgba(255,255,255,.85);font-family:sans-serif;margin-top:2px}
   .pad{padding:0 16px}
   .card{background:#fff;border-radius:20px;padding:16px;box-shadow:0 2px 16px rgba(232,84,122,.08);border:1px solid var(--blush);margin-bottom:12px}
-  
+
   .sec-hdr{display:flex;justify-content:space-between;align-items:center;margin:16px 0 10px}
   .sec-hdr h3{font-size:15px;font-weight:bold;color:var(--ink)}
   .sec-hdr span{font-size:12px;color:var(--rose);font-family:sans-serif;font-weight:600;cursor:pointer}
   .badge{font-size:9px;font-family:sans-serif;font-weight:700;letter-spacing:.8px;border-radius:6px;padding:2px 7px;display:inline-block;text-transform:uppercase}
-  
+
   .btn-rose{background:linear-gradient(135deg,var(--rose),var(--rose-soft));border:none;border-radius:10px;padding:8px 16px;font-size:12px;color:#fff;font-family:sans-serif;font-weight:700;cursor:pointer;width:100%;text-align:center}
   .btn-teal{background:var(--teal);border:none;border-radius:10px;padding:8px 16px;font-size:12px;color:#fff;font-family:sans-serif;font-weight:700;cursor:pointer;width:100%;text-align:center}
   .btn-outline{background:transparent;border:1px solid var(--rose);color:var(--rose);border-radius:10px;padding:8px 16px;font-size:12px;font-family:sans-serif;font-weight:700;cursor:pointer;width:100%;text-align:center}
-  
+
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 
@@ -49,7 +49,7 @@
   .bnav button .nav-label{font-size:9px;font-family:sans-serif;letter-spacing:.3px;color:var(--slate);font-weight:400;transition:color .2s}
   .bnav button.active .nav-icon{transform:scale(1.18);color:var(--rose)}
   .bnav button.active .nav-label{color:var(--rose);font-weight:700}
-  
+
   /* Modals */
   .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:2000;display:none;align-items:center;justify-content:center;opacity:0;transition:opacity 0.3s}
   .modal-overlay.show{display:flex;opacity:1}
@@ -61,7 +61,7 @@
   .chat-msg{max-width:85%;padding:10px 14px;border-radius:12px;font-size:13px;font-family:sans-serif;line-height:1.4;margin-bottom:8px}
   .chat-ai{background:rgba(13,148,136,.1);border:1px solid rgba(13,148,136,.3);align-self:flex-start;border-bottom-left-radius:2px;color:var(--teal)}
   .chat-user{background:var(--teal);color:white;align-self:flex-end;border-bottom-right-radius:2px;margin-left:auto}
-  
+
   .filter-btn{background:rgba(255,255,255,0.8);border:1px solid var(--slate);border-radius:12px;padding:6px 12px;font-size:11px;font-family:sans-serif;font-weight:700;cursor:pointer;color:var(--slate);margin-right:4px}
   .filter-btn.active{background:var(--rose);color:white;border-color:var(--rose)}
 
@@ -153,20 +153,20 @@
   <div class="login-card">
     <div style="font-size:22px;font-weight:bold;color:var(--ink);margin-bottom:4px;font-family:sans-serif">Welcome Back 🌸</div>
     <div style="font-size:13px;color:var(--slate);font-family:sans-serif;margin-bottom:24px">Sign in to your account</div>
-    
+
     <label style="font-size:11px;font-weight:700;color:var(--slate);font-family:sans-serif;text-transform:uppercase;letter-spacing:.8px">Email</label>
     <input type="email" id="loginEmail" class="input-field" placeholder="sarah@example.com" value="sarah@example.com" style="margin-bottom:16px">
-    
+
     <label style="font-size:11px;font-weight:700;color:var(--slate);font-family:sans-serif;text-transform:uppercase;letter-spacing:.8px">Password</label>
     <div style="position:relative">
       <input type="password" id="loginPass" class="input-field" placeholder="••••••••" value="password123">
       <span onclick="togglePwd()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:16px;color:var(--slate)">👁</span>
     </div>
-    
+
     <div style="text-align:right;margin:8px 0 20px">
       <span style="font-size:12px;color:var(--rose);font-family:sans-serif;cursor:pointer;font-weight:600">Forgot Password?</span>
     </div>
-    
+
     <!-- API Key Setup -->
     <div id="apiKeySetup" style="margin-bottom:20px">
       <label style="font-size:11px;font-weight:700;color:var(--slate);font-family:sans-serif;text-transform:uppercase;letter-spacing:.8px">
@@ -194,17 +194,17 @@
     </div>
 
     <button class="btn-rose" id="loginBtn" onclick="doLogin()" style="font-size:15px;padding:14px">Sign In</button>
-    
+
     <div style="text-align:center;margin-top:16px;font-size:12px;font-family:sans-serif;color:var(--slate)">
       Don't have an account? <span style="color:var(--rose);font-weight:700;cursor:pointer" onclick="alert('Registration coming soon!')">Sign Up</span>
     </div>
-    
+
     <div style="display:flex;align-items:center;margin:16px 0">
       <div style="flex:1;height:1px;background:var(--mist)"></div>
       <div style="font-size:11px;color:var(--slate);font-family:sans-serif;padding:0 12px">or continue with</div>
       <div style="flex:1;height:1px;background:var(--mist)"></div>
     </div>
-    
+
     <button onclick="doLogin()" style="width:100%;background:white;border:1px solid var(--mist);border-radius:10px;padding:12px;font-size:13px;font-family:sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;color:var(--ink)">
       <span style="font-size:18px">🔵</span> Continue with Google
     </button>
@@ -221,7 +221,7 @@
       </div>
       <div id="headerAvatar" onclick="nav('profile')" style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;color:#fff;border:2px solid rgba(255,255,255,.5);cursor:pointer">SL</div>
     </div>
-    
+
     <div style="background:rgba(255,255,255,.22);backdrop-filter:blur(12px);border-radius:20px;padding:16px 18px;border:1px solid rgba(255,255,255,.35)">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
         <div>
@@ -342,10 +342,6 @@
     <button onclick="scrollToSection('sec-eprescription')" style="flex:1;background:#fff;border:1.5px solid var(--mist);border-radius:12px;padding:10px 6px;font-size:11px;font-family:sans-serif;font-weight:700;color:var(--ink);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:0 1px 6px rgba(0,0,0,.06);transition:all .2s" onmouseover="this.style.borderColor='#EA580C'" onmouseout="this.style.borderColor='var(--mist)'">
       <span style="font-size:20px">💊</span>
       <span style="font-size:10px;color:var(--slate)">E-Prescription</span>
-    </button>
-    <button onclick="scrollToSection('sec-aireader')" style="flex:1;background:#fff;border:1.5px solid var(--mist);border-radius:12px;padding:10px 6px;font-size:11px;font-family:sans-serif;font-weight:700;color:var(--ink);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:0 1px 6px rgba(0,0,0,.06);transition:all .2s" onmouseover="this.style.borderColor='#2563EB'" onmouseout="this.style.borderColor='var(--mist)'">
-      <span style="font-size:20px">📄</span>
-      <span style="font-size:10px;color:var(--slate)">AI Report Reader</span>
     </button>
     <button onclick="alert('Teleconsultation launching soon! 📹')" style="flex:1;background:#fff;border:1.5px solid var(--mist);border-radius:12px;padding:10px 6px;font-size:11px;font-family:sans-serif;font-weight:700;color:var(--ink);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:0 1px 6px rgba(0,0,0,.06);transition:all .2s" onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--mist)'">
       <span style="font-size:20px">📹</span>
@@ -549,34 +545,7 @@
       <button class="btn-teal" style="background:#EA580C;border-radius:8px" onclick="openDelivModal()" data-tr="orderBtn">🛵 Order Delivery (RM 45)</button>
     </div>
 
-    <!-- ── SECTION: AI Report Reader ── -->
-    <div id="sec-aireader" class="sec-hdr" style="margin-top:20px"><h3 data-tr="aiReader">📄 AI Report Reader</h3></div>
-    <div class="card" style="background:#F8FAFC;border:1px dashed var(--slate)">
-      <div style="background:linear-gradient(135deg,#EFF6FF,#DBEAFE);border-radius:12px;padding:12px;margin-bottom:12px;border:1px solid #BFDBFE">
-        <div style="font-size:12px;font-weight:bold;color:#1D4ED8;font-family:sans-serif;margin-bottom:4px">📋 Sample Report Available</div>
-        <div style="font-size:10px;color:#3B82F6;font-family:sans-serif;margin-bottom:8px">Try analyzing this sample blood test report</div>
-        <button onclick="loadSampleReport()" style="background:#2563EB;border:none;color:white;border-radius:8px;padding:7px 14px;font-size:11px;font-family:sans-serif;font-weight:700;cursor:pointer">📥 Load Sample PDF Report</button>
-      </div>
-      <div style="text-align:center;margin-bottom:12px">
-        <input type="file" id="reportInput" accept=".pdf" style="display:none" onchange="handlePDFUpload()">
-        <button class="btn-outline" onclick="document.getElementById('reportInput').click()" data-tr="uploadBtn" style="color:var(--slate);border-color:var(--slate)">+ Upload New PDF Report</button>
-      </div>
-      <div style="font-size:12px;font-weight:bold;margin-bottom:8px;color:var(--ink);font-family:sans-serif" data-tr="hist">History:</div>
-      <ul id="reportHistory" style="list-style:none;font-size:11px;font-family:sans-serif;color:var(--slate);display:flex;flex-direction:column;gap:8px">
-        <li style="background:var(--white);padding:8px;border-radius:6px;border:1px solid var(--blush);cursor:pointer" onclick="showSavedReport('Blood_Test_April.pdf')">📄 Blood_Test_April.pdf (Analyzed) <span style="float:right;color:var(--jade)">✅</span></li>
-      </ul>
-      <div id="pdfResult" style="display:none;margin-top:12px;background:white;border-radius:8px;padding:12px;font-size:11px;font-family:sans-serif;border:1px solid var(--jade);color:var(--ink)">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-          <span style="font-size:18px">📄</span>
-          <strong id="pdfFileName" style="font-size:13px">Scan.pdf</strong>
-        </div>
-        <div style="background:linear-gradient(135deg,#F0FDF4,#DCFCE7);border-radius:8px;padding:10px;border:1px solid #BBF7D0;margin-bottom:8px">
-          <div style="color:#15803D;font-weight:bold;font-size:12px;margin-bottom:6px">🤖 AI Analysis Summary</div>
-          <div id="pdfAnalysis">Tap "Load Sample" or upload a PDF to analyze.</div>
-        </div>
-        <button class="btn-outline" style="font-size:11px;padding:7px" onclick="document.getElementById('pdfResult').style.display='none'">Close Analysis</button>
-      </div>
-    </div>
+
 
   </div>
 </div>
@@ -608,6 +577,7 @@
         <div><div style="font-size:18px;font-weight:bold;color:var(--rose)">Aug 21</div><div style="font-size:9px;color:var(--slate)">Est. Due Date</div></div>
       </div>
     </div>
+
 
     <!-- ── Baby Development ── -->
     <div class="sec-hdr"><h3>👶 Baby at Week 24</h3></div>
@@ -646,6 +616,36 @@
       </div>
       <div id="kickTimerDisplay" style="font-size:10px;color:var(--slate);margin-top:8px"></div>
     </div>
+
+
+      <!-- ── SECTION: AI Report Reader ── -->
+    <div id="sec-aireader" class="sec-hdr" style="margin-top:20px"><h3 data-tr="aiReader">📄 AI Report Reader</h3></div>
+    <div class="card" style="background:#F8FAFC;border:1px dashed var(--slate)">
+      <div style="background:linear-gradient(135deg,#EFF6FF,#DBEAFE);border-radius:12px;padding:12px;margin-bottom:12px;border:1px solid #BFDBFE">
+        <div style="font-size:12px;font-weight:bold;color:#1D4ED8;font-family:sans-serif;margin-bottom:4px">📋 Sample Report Available</div>
+        <div style="font-size:10px;color:#3B82F6;font-family:sans-serif;margin-bottom:8px">Try analyzing this sample blood test report</div>
+        <button onclick="loadSampleReport()" style="background:#2563EB;border:none;color:white;border-radius:8px;padding:7px 14px;font-size:11px;font-family:sans-serif;font-weight:700;cursor:pointer">📥 Load Sample PDF Report</button>
+      </div>
+      <div style="text-align:center;margin-bottom:12px">
+        <input type="file" id="reportInput" accept=".pdf" style="display:none" onchange="handlePDFUpload()">
+        <button class="btn-outline" onclick="document.getElementById('reportInput').click()" data-tr="uploadBtn" style="color:var(--slate);border-color:var(--slate)">+ Upload New PDF Report</button>
+      </div>
+      <div style="font-size:12px;font-weight:bold;margin-bottom:8px;color:var(--ink);font-family:sans-serif" data-tr="hist">History:</div>
+      <ul id="reportHistory" style="list-style:none;font-size:11px;font-family:sans-serif;color:var(--slate);display:flex;flex-direction:column;gap:8px">
+        <li style="background:var(--white);padding:8px;border-radius:6px;border:1px solid var(--blush);cursor:pointer" onclick="showSavedReport('Blood_Test_April.pdf')">📄 Blood_Test_April.pdf (Analyzed) <span style="float:right;color:var(--jade)">✅</span></li>
+      </ul>
+      <div id="pdfResult" style="display:none;margin-top:12px;background:white;border-radius:8px;padding:12px;font-size:11px;font-family:sans-serif;border:1px solid var(--jade);color:var(--ink)">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <span style="font-size:18px">📄</span>
+          <strong id="pdfFileName" style="font-size:13px">Scan.pdf</strong>
+        </div>
+        <div style="background:linear-gradient(135deg,#F0FDF4,#DCFCE7);border-radius:8px;padding:10px;border:1px solid #BBF7D0;margin-bottom:8px">
+          <div style="color:#15803D;font-weight:bold;font-size:12px;margin-bottom:6px">🤖 AI Analysis Summary</div>
+          <div id="pdfAnalysis">Tap "Load Sample" or upload a PDF to analyze.</div>
+        </div>
+        <button class="btn-outline" style="font-size:11px;padding:7px" onclick="document.getElementById('pdfResult').style.display='none'">Close Analysis</button>
+      </div>
+
 
     <!-- ── Trimester Guide ── -->
     <div class="sec-hdr"><h3>📋 Trimester Checklist</h3></div>
@@ -709,7 +709,6 @@
         </ul>
       </div>
     </div>
-
     <!-- ── Safe Exercises ── -->
     <div class="sec-hdr"><h3>🧘 Safe Exercises — Week 24</h3></div>
     <div class="grid2">
@@ -737,6 +736,7 @@
         <div style="font-size:10px;color:var(--slate)">20 min low-intensity</div>
         <span class="vital-range range-low" style="margin-top:6px">Use with care</span>
       </div>
+    </div>
     </div>
 
     <!-- ── Common Symptoms ── -->
@@ -787,7 +787,7 @@
 
   <!-- Tabs -->
   <div class="meal-tabs">
-    <div class="meal-tab active" id="tab-harini" data-tr="mealToday" 
+    <div class="meal-tab active" id="tab-harini" data-tr="mealToday"
     onclick="switchMealTab('harini')">Today</div>
 
     <div class="meal-tab" id="tab-rancangan" data-tr="mealPlan"
@@ -1083,7 +1083,7 @@
 
   <div class="pad">
     <div class="card" style="padding:0;overflow:hidden;font-family:sans-serif">
-      
+
       <!-- Language -->
       <div style="padding:16px;border-bottom:1px solid var(--mist);display:flex;justify-content:space-between;align-items:center">
         <div style="display:flex;align-items:center;gap:12px;color:var(--ink)">
@@ -1601,7 +1601,7 @@
     <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:12px;color:var(--ink)"><span>Share Data with AI</span><input type="checkbox" checked></div>
     <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:12px;color:var(--ink)"><span>Share with Panel Clinic</span><input type="checkbox" checked></div>
     <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:16px;color:var(--ink)"><span>Share with Family Sync</span><input type="checkbox" checked></div>
-    
+
     <!-- T&C Section -->
     <div style="background:#FFFBEB;border:1px solid #FCD34D;border-radius:10px;padding:12px;margin-bottom:12px;max-height:140px;overflow-y:auto">
       <div style="font-size:11px;font-weight:bold;color:#92400E;margin-bottom:6px">📜 Terms & Conditions — Health Data Agreement</div>
@@ -1641,9 +1641,9 @@
       <div style="font-size:11px;color:#1D4ED8;font-weight:bold;margin-bottom:2px">💚 How it works</div>
       <div style="font-size:11px;color:#3B82F6">Your maternal health summary is shared with family members via WhatsApp. They get a daily update so they can support you better.</div>
     </div>
-    
+
     <div style="font-size:12px;font-weight:bold;color:var(--ink);margin-bottom:10px">Linked Family Members</div>
-    
+
     <div class="family-member">
       <div class="family-avatar">AH</div>
       <div style="flex:1">
@@ -1652,7 +1652,7 @@
       </div>
       <span class="badge" style="background:#D1FAE5;color:#065F46">Active</span>
     </div>
-    
+
     <div class="family-member" style="border-bottom:none;margin-bottom:14px">
       <div class="family-avatar" style="background:#EFF6FF;color:#3B82F6">SM</div>
       <div style="flex:1">
@@ -1661,15 +1661,15 @@
       </div>
       <span class="badge" style="background:#D1FAE5;color:#065F46">Active</span>
     </div>
-    
+
     <button onclick="sendFamilyUpdate()" style="width:100%;background:#25D366;border:none;color:white;border-radius:10px;padding:12px;font-size:13px;font-family:sans-serif;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px">
       <span style="font-size:18px">📲</span> Send Today's Update via WhatsApp
     </button>
-    
+
     <button onclick="addFamilyMember()" style="width:100%;background:white;border:1px dashed var(--slate);color:var(--slate);border-radius:10px;padding:10px;font-size:12px;font-family:sans-serif;font-weight:700;cursor:pointer;margin-bottom:10px">
       + Add Family Member
     </button>
-    
+
     <div style="font-size:12px;font-weight:bold;color:var(--ink);margin-bottom:6px">What gets shared:</div>
     <ul style="font-size:11px;color:var(--slate);margin-left:14px;line-height:1.7">
       <li>Daily vitals summary (BP, heart rate, weight)</li>
@@ -1688,15 +1688,15 @@
       <h3 style="color:var(--ink)">🔒 Security</h3>
       <i class="ti ti-x" style="cursor:pointer;color:var(--slate);font-size:20px" onclick="closeModal('modal-security')"></i>
     </div>
-    
+
     <div style="font-size:12px;font-weight:bold;color:var(--slate);margin-bottom:6px;text-transform:uppercase;letter-spacing:.8px">Change Email</div>
     <label style="font-size:11px;color:var(--slate)">Current Email</label>
     <input type="email" class="input-field" value="sarah@example.com" readonly style="background:#F8FAFC;color:var(--slate)">
     <label style="font-size:11px;color:var(--slate);display:block;margin-top:10px">New Email</label>
     <input type="email" id="secNewEmail" class="input-field" placeholder="newemail@example.com">
-    
+
     <div style="height:1px;background:var(--mist);margin:16px 0"></div>
-    
+
     <div style="font-size:12px;font-weight:bold;color:var(--slate);margin-bottom:6px;text-transform:uppercase;letter-spacing:.8px">Change Password</div>
     <label style="font-size:11px;color:var(--slate)">Current Password</label>
     <input type="password" id="secOldPwd" class="input-field" placeholder="••••••••">
@@ -1704,12 +1704,12 @@
     <input type="password" id="secNewPwd" class="input-field" placeholder="••••••••">
     <label style="font-size:11px;color:var(--slate);display:block;margin-top:10px">Confirm New Password</label>
     <input type="password" id="secConfPwd" class="input-field" placeholder="••••••••">
-    
+
     <div style="background:#FFF1F2;border-radius:8px;padding:10px;margin-top:12px;border:1px solid var(--peach)">
       <div style="font-size:10px;color:var(--rose);font-weight:bold">🔐 Password requirements</div>
       <div style="font-size:10px;color:var(--slate);margin-top:4px">At least 8 characters · One uppercase · One number</div>
     </div>
-    
+
     <div style="display:flex;gap:8px;margin-top:16px">
       <button class="btn-outline" style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;border-color:var(--slate);color:var(--slate)" onclick="closeModal('modal-security')">
         <i class="ti ti-x"></i> Cancel
@@ -1915,6 +1915,7 @@
   // ═══ LOGIN ═══
   // Global API key store
   let ANTHROPIC_API_KEY = '';
+  let lastReportAnalysis = '';
 
   // ── Restore key from sessionStorage if available ──
   window.addEventListener('DOMContentLoaded', () => {
@@ -2197,32 +2198,112 @@
     tip:"Pair iron-rich foods (spinach, chicken liver, red meat) with Vitamin C sources (orange, papaya, guava) at each meal to boost iron absorption — critical at Week 24 with your current haemoglobin levels."
   };
 
-  function generateWeeklyPlan() {
+  async function generateWeeklyPlan() {
     const btn = document.getElementById('genPlanBtn');
     const resultDiv = document.getElementById('weeklyPlanResult');
     const lang = document.getElementById('langSel').value;
     btn.disabled = true;
-    btn.innerHTML = '⏳ Loading…';
+    btn.innerHTML = '⏳ Generating…';
     resultDiv.style.display = 'block';
-    resultDiv.innerHTML = '<div class="card" style="text-align:center;padding:20px;font-family:sans-serif"><div style="font-size:28px;margin-bottom:8px">🗓</div><div style="font-size:12px;color:var(--slate)">Preparing your sample plan...</div></div>';
+    resultDiv.innerHTML = `
+      <div class="card" style="text-align:center;padding:24px 20px;font-family:sans-serif;background:linear-gradient(135deg,#FFF1F2,#FFE4EC);border-color:var(--peach)">
+        <div style="font-size:36px;margin-bottom:10px">🤖</div>
+        <div style="font-size:14px;font-weight:bold;color:var(--rose);margin-bottom:4px">${lastReportAnalysis ? 'Personalising based on your lab report…' : 'Generating your meal plan…'}</div>
+        <div style="font-size:11px;color:var(--slate);margin-bottom:14px">${lastReportAnalysis ? 'Your AI Report Reader results are being used to customise nutrition targets.' : 'Tip: Analyze a lab report in Ibu Sihat → AI Report Reader for a personalised plan!'}</div>
+        <div style="height:4px;background:var(--blush);border-radius:4px;overflow:hidden">
+          <div style="height:100%;background:linear-gradient(90deg,var(--rose),var(--rose-soft));border-radius:4px;animation:loadBar 1.8s ease-in-out infinite"></div>
+        </div>
+      </div>`;
 
-    setTimeout(() => {
-      renderWeeklyPlan(SAMPLE_MEAL_PLAN, lang);
-      btn.disabled = false;
-      btn.setAttribute('data-tr', 'genPlanBtn');
-      const d = langDict[document.getElementById('langSel').value];
-      btn.innerHTML = d.genPlanBtn || 'Generate My Plan';
-    }, 600);
+    // Build the report context string for the AI prompt
+    const reportContext = lastReportAnalysis
+      ? `\n\nHer latest lab report (from AI Report Reader) shows:\n${lastReportAnalysis}\n\nUse these specific values to personalise the meal plan — especially any LOW or HIGH flagged nutrients.`
+      : '\n\nNo lab report has been analyzed yet. Use general Week 24 maternal nutrition guidelines.';
+
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: getApiHeaders(),
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 2000,
+          system: `You are a maternal dietitian AI generating a 7-day meal plan for a pregnant patient.
+Patient: Sarah Lee, Week 24 of pregnancy (Second Trimester), Malaysian.
+Standard Week 24 targets: 2,200 kcal/day, Protein 71g, Iron 27mg, Calcium 1,000mg, Folic Acid 600mcg, DHA 200mg, Fibre 28g.
+${reportContext}
+
+Respond ONLY in this exact JSON format with no markdown or extra text:
+{
+  "report_used": true or false,
+  "deficiencies_addressed": ["list any flagged lab values being targeted, or empty array"],
+  "tip": "one personalised nutrition tip based on lab results or general advice",
+  "days": [
+    {
+      "day": "Monday",
+      "kcal": 2200,
+      "breakfast": "meal description",
+      "lunch": "meal description",
+      "dinner": "meal description",
+      "snacks": "snack description"
+    }
+  ]
+}
+Include all 7 days (Monday–Sunday). Focus on Malaysian foods. If lab deficiencies exist, ensure those nutrients are prominently featured every day.`,
+          messages: [{ role: 'user', content: 'Generate my personalised 7-day maternal meal plan.' }]
+        })
+      });
+
+      const data = await response.json();
+      if (data.error) throw new Error(data.error.message || 'API error');
+      if (!data.content || !data.content[0]) throw new Error('Empty response from API');
+
+      let raw = data.content[0].text.trim().replace(/```json|```/g, '').trim();
+      const plan = JSON.parse(raw);
+      renderWeeklyPlan(plan, lang);
+
+    } catch (err) {
+      // Fallback to sample plan on error
+      console.warn('AI plan generation failed, using sample:', err.message);
+      resultDiv.innerHTML = `<div class="card" style="background:#FEF2F2;border-color:#FECACA;padding:12px;font-family:sans-serif;margin-bottom:8px">
+        <div style="font-size:12px;color:#991B1B">⚠️ AI unavailable: ${err.message}. Showing sample plan instead.</div>
+      </div>`;
+      setTimeout(() => renderWeeklyPlan(SAMPLE_MEAL_PLAN, lang), 400);
+    }
+
+    btn.disabled = false;
+    btn.setAttribute('data-tr', 'genPlanBtn');
+    const d = langDict[document.getElementById('langSel').value];
+    btn.innerHTML = d.genPlanBtn || 'Generate My Plan';
   }
-
   function renderWeeklyPlan(plan, lang) {
     const resultDiv = document.getElementById('weeklyPlanResult');
     const dayColors = ['#FFF1F2','#FFF7ED','#FFFBEB','#F0FDF4','#EFF6FF','#F5F3FF','#FDF4FF'];
     const dayBorders = ['#FECACA','#FED7AA','#FDE68A','#BBF7D0','#BFDBFE','#DDD6FE','#F5D0FE'];
     const days = plan.days || [];
 
-    let html = `<div style="font-family:sans-serif">`;
-    days.forEach((d, i) => {
+    // Show personalisation banner if lab report was used
+    const deficiencies = plan.deficiencies_addressed || [];
+    const reportBanner = plan.report_used && deficiencies.length > 0
+      ? `<div style="background:linear-gradient(135deg,#EFF6FF,#DBEAFE);border-radius:14px;padding:12px 14px;margin-bottom:10px;border:1px solid #BFDBFE">
+           <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+             <span style="font-size:16px">🧬</span>
+             <div style="font-size:12px;font-weight:bold;color:#1D4ED8">Personalised from Your Lab Report</div>
+           </div>
+           <div style="font-size:11px;color:#3B82F6;margin-bottom:6px">This plan targets your flagged nutrient levels:</div>
+           <div style="display:flex;flex-wrap:wrap;gap:5px">
+             ${deficiencies.map(d => `<span style="background:#DBEAFE;color:#1E40AF;border-radius:6px;padding:2px 8px;font-size:10px;font-weight:600">⚠️ ${d}</span>`).join('')}
+           </div>
+         </div>`
+      : lastReportAnalysis
+        ? `<div style="background:linear-gradient(135deg,#F0FDF4,#DCFCE7);border-radius:14px;padding:10px 14px;margin-bottom:10px;border:1px solid #BBF7D0">
+             <div style="font-size:11px;color:#15803D;font-weight:bold">✅ Personalised using your AI Report Reader analysis</div>
+             <div style="font-size:10px;color:#166534;margin-top:2px">All values from your blood panel have been considered in this plan.</div>
+           </div>`
+        : `<div style="background:#FFFBEB;border-radius:14px;padding:10px 14px;margin-bottom:10px;border:1px solid #FCD34D">
+             <div style="font-size:11px;color:#92400E">💡 <strong>Tip:</strong> Analyze a lab report in <strong>Ibu Sihat → AI Report Reader</strong> to get a fully personalised meal plan based on your actual blood values!</div>
+           </div>`;
+
+    let html = `<div style="font-family:sans-serif">${reportBanner}`;  days.forEach((d, i) => {
       html += `
       <div class="card" style="background:${dayColors[i%7]};border-color:${dayBorders[i%7]};margin-bottom:10px;padding:12px">
         <div style="font-size:12px;font-weight:bold;color:var(--ink);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">
@@ -2329,8 +2410,9 @@ Provide warm, concise, medically accurate pregnancy advice. Keep responses under
       const data = await response.json();
       if (data.error) throw new Error(data.error.message || 'API error');
       if (!data.content || !data.content[0]) throw new Error('Empty response from API');
-      document.getElementById('pdfAnalysis').innerHTML = data.content[0].text.replace(/\n/g, '<br>');
-      hist.querySelector('li').innerHTML = `📄 ${fileName} (Analyzed) <span style="float:right;color:var(--jade)">✅</span>`;
+      const reply = data.content[0].text;
+      lastReportAnalysis = reply; // store for meal plan generation  ← FIXED: after reply is defined
+      document.getElementById('pdfAnalysis').innerHTML = reply.replace(/\n/g, '<br>');hist.querySelector('li').innerHTML = `📄 ${fileName} (Analyzed) <span style="float:right;color:var(--jade)">✅</span>`;
     } catch (err) {
       document.getElementById('pdfAnalysis').innerHTML = `❌ ${err.message || "Unable to reach AI. Please check your API key and try again."}`;
       hist.querySelector('li').innerHTML = '📄 ' + fileName + ' (Failed) <span style="float:right;color:#EF4444">❌</span>';
@@ -2425,7 +2507,7 @@ Rubella IgG: Immune`;
 
 Her daily nutritional targets (Week 24):
 - Calories: 2,200 kcal/day
-- Protein: 71g/day  
+- Protein: 71g/day
 - Iron: 27mg/day (currently low at 18mg)
 - Calcium: 1,000mg/day
 - Folic Acid: 600mcg/day
@@ -2599,7 +2681,7 @@ Analyze the meal described and respond ONLY in this exact JSON format (no markdo
     if (!n) { alert('Name cannot be empty!'); return; }
     document.getElementById('profName').innerText = n;
     document.getElementById('profPhone').innerText = p;
-    
+
     // Sync initials
     const parts = n.trim().split(' ');
     const initials = parts.map(w => w[0]).join('').substring(0, 2).toUpperCase();
@@ -2610,7 +2692,7 @@ Analyze the meal described and respond ONLY in this exact JSON format (no markdo
     const firstName = parts[0];
     const dict = langDict[document.getElementById('langSel').value];
     document.getElementById('greetName').innerText = `${dict.greet}, ${firstName} 🌸`;
-    
+
     closeModal('modal-edit');
   }
 
