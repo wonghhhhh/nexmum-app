@@ -245,47 +245,47 @@
       </div>
     </div>
     <div class="grid2" id="vitalsGrid">
-      <div class="card" style="padding:12px">
-        <div style="display:flex;align-items:center;gap:8px">
-          <div style="font-size:22px">🩺</div>
-          <div>
-            <div style="font-size:16px;font-weight:bold;color:var(--ink);line-height:1">118/76</div>
-            <div style="font-size:10px;color:var(--slate);font-family:sans-serif">Blood Pressure</div>
-            <span class="vital-range range-normal">Normal (90-140/60-90)</span>
-          </div>
-        </div>
-      </div>
-      <div class="card" style="padding:12px">
-        <div style="display:flex;align-items:center;gap:8px">
-          <div style="font-size:22px">❤️</div>
-          <div>
-            <div style="font-size:16px;font-weight:bold;color:var(--ink);line-height:1">82<span style="font-size:10px"> bpm</span></div>
-            <div style="font-size:10px;color:var(--slate);font-family:sans-serif">Heart Rate</div>
-            <span class="vital-range range-normal">Normal (60–100 bpm)</span>
-          </div>
-        </div>
-      </div>
-      <div class="card" style="padding:12px">
-        <div style="display:flex;align-items:center;gap:8px">
-          <div style="font-size:22px">⚖️</div>
-          <div>
-            <div style="font-size:16px;font-weight:bold;color:var(--ink);line-height:1">62.4<span style="font-size:10px"> kg</span></div>
-            <div style="font-size:10px;color:var(--slate);font-family:sans-serif">Weight</div>
-            <span class="vital-range range-normal">On Track (58–68 kg)</span>
-          </div>
-        </div>
-      </div>
-      <div class="card" style="padding:12px">
-        <div style="display:flex;align-items:center;gap:8px">
-          <div style="font-size:22px">🦶</div>
-          <div>
-            <div style="font-size:16px;font-weight:bold;color:var(--ink);line-height:1">12<span style="font-size:10px"> kicks</span></div>
-            <div style="font-size:10px;color:var(--slate);font-family:sans-serif">Baby Kicks</div>
-            <span class="vital-range range-low">Target ≥10/day</span>
-          </div>
+    <div class="card" style="padding:12px" id="card-bp">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="font-size:22px">🩺</div>
+        <div>
+          <div style="font-size:16px;font-weight:bold;color:var(--ink);line-height:1" id="disp-bp">118/76</div>
+          <div style="font-size:10px;color:var(--slate);font-family:sans-serif">Blood Pressure</div>
+          <span class="vital-range range-normal" id="disp-bp-range">Normal (90-140/60-90)</span>
         </div>
       </div>
     </div>
+    <div class="card" style="padding:12px" id="card-hr">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="font-size:22px">❤️</div>
+        <div>
+          <div style="font-size:16px;font-weight:bold;color:var(--ink);line-height:1" id="disp-hr">82<span style="font-size:10px"> bpm</span></div>
+          <div style="font-size:10px;color:var(--slate);font-family:sans-serif">Heart Rate</div>
+          <span class="vital-range range-normal" id="disp-hr-range">Normal (60–100 bpm)</span>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="padding:12px" id="card-wt">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="font-size:22px">⚖️</div>
+        <div>
+          <div style="font-size:16px;font-weight:bold;color:var(--ink);line-height:1" id="disp-wt">62.4<span style="font-size:10px"> kg</span></div>
+          <div style="font-size:10px;color:var(--slate);font-family:sans-serif">Weight</div>
+          <span class="vital-range range-normal" id="disp-wt-range">On Track (58–68 kg)</span>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="padding:12px" id="card-kicks">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="font-size:22px">🦶</div>
+        <div>
+          <div style="font-size:16px;font-weight:bold;color:var(--ink);line-height:1" id="disp-kicks">12<span style="font-size:10px"> kicks</span></div>
+          <div style="font-size:10px;color:var(--slate);font-family:sans-serif">Baby Kicks</div>
+          <span class="vital-range range-low" id="disp-kicks-range">Target ≥10/day</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
     <!-- AI MATERNITY ASSISTANT (replaces Quick Actions) -->
     <div class="sec-hdr"><h3>🤖 AI Maternity Assistant</h3></div>
@@ -1180,44 +1180,46 @@
   </button>
 </div>
 
-<!-- ═══════════════════════════ MODALS ═══════════════════════════ -->
-
-<!-- Edit Profile Modal -->
-<div id="modal-edit" class="modal-overlay">
+<!-- ═══ LOG VITALS MODAL ═══ -->
+<div id="modal-logvitals" class="modal-overlay">
   <div class="modal" style="font-family:sans-serif">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-      <h3 style="color:var(--ink)">✏️ Edit Profile</h3>
-      <i class="ti ti-x" style="cursor:pointer;color:var(--slate);font-size:20px" onclick="closeModal('modal-edit')"></i>
+      <h3 style="color:var(--ink)">📊 Log Today's Vitals</h3>
+      <i class="ti ti-x" style="cursor:pointer;color:var(--slate);font-size:20px" onclick="closeModal('modal-logvitals')"></i>
     </div>
-    <label style="font-size:11px;font-weight:600;color:var(--slate)">Full Name</label>
-    <input type="text" id="inpName" class="input-field" value="Sarah Lee">
-    <label style="font-size:11px;font-weight:600;color:var(--slate);display:block;margin-top:10px">Phone Number</label>
-    <input type="text" id="inpPhone" class="input-field" value="+60 12-345 6789">
-    <label style="font-size:11px;font-weight:600;color:var(--slate);display:block;margin-top:10px">Date of Birth</label>
-    <input type="date" id="inpDOB" class="input-field" value="1995-03-14">
-    <label style="font-size:11px;font-weight:600;color:var(--slate);display:block;margin-top:10px">Pregnancy Start Date (LMP)</label>
-    <input type="date" id="inpPregnancyStart" class="input-field" value="2025-11-14">
-    <label style="font-size:11px;font-weight:600;color:var(--slate);display:block;margin-top:10px">Blood Type</label>
-    <select id="inpBlood" class="input-field">
-      <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
-      <option>AB+</option><option>AB-</option><option selected>O+</option><option>O-</option>
-    </select>
-    <div style="display:flex;gap:8px;margin-top:20px">
-      <button class="btn-outline" style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px" onclick="closeModal('modal-edit')">
-        <i class="ti ti-x"></i> Cancel
-      </button>
-      <button class="btn-rose" style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px" onclick="saveProf()">
-        <i class="ti ti-device-floppy"></i> Save
-      </button>
+ 
+    <label style="font-size:11px;font-weight:600;color:var(--slate)">Blood Pressure (Systolic / Diastolic mmHg)</label>
+    <div style="display:flex;gap:8px">
+      <input type="number" id="vitalSystolic" class="input-field" placeholder="e.g. 118" min="60" max="200" style="flex:1">
+      <input type="number" id="vitalDiastolic" class="input-field" placeholder="e.g. 76" min="40" max="130" style="flex:1">
+    </div>
+    <label style="font-size:11px;font-weight:600;color:var(--slate);display:block;margin-top:10px">Heart Rate (bpm)</label>
+    <input type="number" id="vitalHR" class="input-field" placeholder="e.g. 82" min="40" max="200">
+    <label style="font-size:11px;font-weight:600;color:var(--slate);display:block;margin-top:10px">Weight (kg)</label>
+    <input type="number" id="vitalWeight" class="input-field" placeholder="e.g. 62.4" step="0.1" min="30" max="200">
+    <label style="font-size:11px;font-weight:600;color:var(--slate);display:block;margin-top:10px">Baby Kicks (today)</label>
+    <input type="number" id="vitalKicks" class="input-field" placeholder="e.g. 12" min="0" max="200">
+ 
+    <!-- Live preview -->
+    <div id="vitalPreview" style="margin-top:12px;background:#F0FDF4;border-radius:10px;padding:10px;border:1px solid #BBF7D0;display:none">
+      <div style="font-size:10px;font-weight:700;color:#15803D;margin-bottom:4px">Preview — will update cards:</div>
+      <div id="vitalPreviewText" style="font-size:11px;color:#166534;line-height:1.8"></div>
+    </div>
+ 
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="btn-outline" style="flex:1" onclick="closeModal('modal-logvitals')">Cancel</button>
+      <button class="btn-rose" style="flex:1" onclick="saveVitals()">Save Vitals ✅</button>
     </div>
   </div>
 </div>
-
-<!-- Reschedule Modal -->
+ 
+<!-- ═══ RESCHEDULE MODAL ═══ -->
 <div id="modal-reschedule" class="modal-overlay">
   <div class="modal" style="font-family:sans-serif">
-    <h3 style="margin-bottom:12px;color:var(--ink)">Reschedule Appointment</h3>
+    <h3 style="margin-bottom:12px;color:var(--ink)">🔄 Reschedule Appointment</h3>
+    <label style="font-size:11px;font-weight:600;color:var(--slate)">New Date</label>
     <input type="date" id="resDate" class="input-field" value="2026-05-15">
+    <label style="font-size:11px;font-weight:600;color:var(--slate);display:block;margin-top:10px">New Time</label>
     <input type="time" id="resTime" class="input-field" value="14:00">
     <div style="display:flex;gap:8px;margin-top:20px">
       <button class="btn-outline" style="flex:1" onclick="closeModal('modal-reschedule')">Cancel</button>
@@ -1916,6 +1918,14 @@
   // Global API key store
   let ANTHROPIC_API_KEY = '';
   let lastReportAnalysis = '';
+
+  // ─── SHARED VITALS STATE (single source of truth) ───
+  const vitalsState = {
+    bp_sys: 118, bp_dia: 76,
+    hr: 82,
+    weight: 62.4,
+    kicks: 12
+  };
 
   // ── Restore key from sessionStorage if available ──
   window.addEventListener('DOMContentLoaded', () => {
@@ -2827,27 +2837,93 @@ Analyze the meal described and respond ONLY in this exact JSON format (no markdo
   setTimeout(renderWaterGlasses, 100);
 
   // ═══ LOG VITALS ═══
-  function saveVitals() {
+  function saveVitals(){
+    const sys = parseInt(document.getElementById('vitalSystolic').value);
+    const dia = parseInt(document.getElementById('vitalDiastolic').value);
+    const hr  = parseInt(document.getElementById('vitalHR').value);
+    const wt  = parseFloat(document.getElementById('vitalWeight').value);
+    const kk  = parseInt(document.getElementById('vitalKicks').value);
+ 
+    if (!sys || !dia){ alert('Please enter your blood pressure.'); return; }
+ 
+  // 1. Update shared state
+    vitalsState.bp_sys = sys; vitalsState.bp_dia = dia;
+    if (!isNaN(hr))  vitalsState.hr = hr;
+    if (!isNaN(wt))  vitalsState.weight = wt;
+    if (!isNaN(kk))  vitalsState.kicks = kk;
+ 
+  // 2. Update BP card
+    document.getElementById('disp-bp').innerText = `${sys}/${dia}`;
+    const bpHigh = sys > 140 || dia > 90, bpLow = sys < 90 || dia < 60;
+    const bpEl = document.getElementById('disp-bp-range');
+    bpEl.className = 'vital-range ' + (bpHigh?'range-high':bpLow?'range-low':'range-normal');
+    bpEl.innerText = bpHigh ? '⚠️ High — consult Dr. Aisha' : bpLow ? '⚠️ Low — monitor closely' : 'Normal (90-140/60-90)';
+ 
+  // 3. Update HR card
+    if (!isNaN(hr)){
+      document.getElementById('disp-hr').innerHTML = `${hr}<span style="font-size:10px"> bpm</span>`;
+      const hrEl = document.getElementById('disp-hr-range');
+      hrEl.className = 'vital-range ' + (hr < 60 || hr > 100 ? 'range-high' : 'range-normal');
+      hrEl.innerText = hr < 60 || hr > 100 ? '⚠️ Outside normal range' : 'Normal (60–100 bpm)';
+    }
+ 
+  // 4. Update Weight card
+    if (!isNaN(wt)){
+      document.getElementById('disp-wt').innerHTML = `${wt}<span style="font-size:10px"> kg</span>`;
+      const wtEl = document.getElementById('disp-wt-range');
+      const wtLow = wt < 58, wtHigh = wt > 75;
+      wtEl.className = 'vital-range ' + (wtHigh?'range-high':wtLow?'range-low':'range-normal');
+      wtEl.innerText = wtHigh ? '⚠️ Above range' : wtLow ? '⚠️ Below range' : 'On Track (58–68 kg)';
+    }
+ 
+  // 5. Update Kicks card
+    if (!isNaN(kk)){
+      document.getElementById('disp-kicks').innerHTML = `${kk}<span style="font-size:10px"> kicks</span>`;
+      const kkEl = document.getElementById('disp-kicks-range');
+      kkEl.className = 'vital-range ' + (kk >= 10 ? 'range-normal' : 'range-low');
+      kkEl.innerText = kk >= 10 ? '✅ Target reached! (≥10/day)' : `Target ≥10/day (${kk} so far)`;
+    }
+ 
+  // 6. Flash animation on updated cards
+    ['card-bp','card-hr','card-wt','card-kicks'].forEach(id => {
+      const el = document.getElementById(id);
+      el.style.transition = 'background .3s';
+      el.style.background = '#F0FDF4';
+      setTimeout(() => el.style.background = 'white', 800);
+    });
+ 
+    closeModal('modal-logvitals');
+  
+  // Clear inputs
+    ['vitalSystolic','vitalDiastolic','vitalHR','vitalWeight','vitalKicks'].forEach(id => {
+      document.getElementById(id).value = '';
+    });
+    document.getElementById('vitalPreview').style.display = 'none';
+  }
+ 
+// Live preview as user types
+  ['vitalSystolic','vitalDiastolic','vitalHR','vitalWeight','vitalKicks'].forEach(id => {
+    document.getElementById(id).addEventListener('input', updatePreview);
+  });
+  function updatePreview(){
     const sys = document.getElementById('vitalSystolic').value;
     const dia = document.getElementById('vitalDiastolic').value;
     const hr  = document.getElementById('vitalHR').value;
     const wt  = document.getElementById('vitalWeight').value;
     const kk  = document.getElementById('vitalKicks').value;
-    if (!sys || !dia) { alert('Please enter your blood pressure.'); return; }
-    // Update the vitals grid cards
-    const cards = document.querySelectorAll('#vitalsGrid .card');
-    if (sys && dia) cards[0].querySelector('div > div:first-child').innerText = `${sys}/${dia}`;
-    if (hr) cards[1].querySelector('div > div:first-child').innerText = `${hr}`;
-    if (wt) cards[2].querySelector('div > div:first-child').innerText = wt;
-    if (kk) {
-      cards[3].querySelector('div > div:first-child').innerText = kk;
-      if (parseInt(kk) >= 10) cards[3].querySelector('.vital-range').className = 'vital-range range-normal';
+    const lines = [];
+    if (sys && dia) lines.push(`🩺 BP: ${sys}/${dia} mmHg`);
+    if (hr) lines.push(`❤️ HR: ${hr} bpm`);
+    if (wt) lines.push(`⚖️ Weight: ${wt} kg`);
+    if (kk) lines.push(`🦶 Kicks: ${kk} today`);
+    const prev = document.getElementById('vitalPreview');
+    if (lines.length > 0){
+      prev.style.display = 'block';
+      document.getElementById('vitalPreviewText').innerHTML = lines.join('<br>');
+    } else {
+      prev.style.display = 'none';
     }
-    closeModal('modal-logvitals');
-    alert('✅ Vitals updated successfully!');
   }
-
-
 
   const langDict = {
     en: {
