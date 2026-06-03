@@ -794,7 +794,7 @@
     onclick="switchMealTab('rancangan')">Meal Plan</div>
 
     <div class="meal-tab" id="tab-pantang" data-tr="mealPantang"
-    onclick="switchMealTab('pantang')">Pantang Guide</div>
+    onclick="switchMealTab('pantang')">Meal History</div>
   </div>
 
   <!-- ── TAB: Hari Ini ── -->
@@ -1025,34 +1025,86 @@
 
   <!-- ── TAB: Pantang Moden ── -->
   <div id="meal-pantang" class="pad" style="display:none">
-    <div style="background:linear-gradient(135deg,#FFF1F2,#FFE4EC);border-radius:16px;padding:14px;margin-bottom:12px;border:1px solid var(--peach);font-family:sans-serif">
-      <div style="font-size:14px;font-weight:bold;color:var(--rose);margin-bottom:4px" data-tr="pantangTitle">🌺 Pantang Moden: Panduan Ibu</div>
-      <div style="font-size:11px;color:var(--ink);line-height:1.6" data-tr="pantangSub">Panduan berasaskan bukti saintifik yang menggabungkan tradisi Melayu dengan penjagaan moden.</div>
-    </div>
-    <div class="card" style="font-family:sans-serif">
-      <div style="font-size:13px;font-weight:bold;color:var(--rose);margin-bottom:10px" data-tr="pantangEatTitle">✅ Makanan Digalakkan</div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div style="display:flex;gap:10px;align-items:flex-start">
-          <span style="font-size:20px">🐟</span>
-          <div><div style="font-size:12px;font-weight:600;color:var(--ink)" data-tr="pantangFish">Ikan haruan & ikan keli</div><div style="font-size:10px;color:var(--slate)" data-tr="pantangFishSub">Membantu proses penyembuhan, kaya protein</div></div>
+    <div class="sec-hdr"><h3>📅 Meal History</h3></div>
+
+  <!-- Day 1 -->
+    <div class="card" style="margin-bottom:10px">
+      <div style="font-size:12px;font-weight:bold;color:var(--ink);margin-bottom:8px;font-family:sans-serif">
+        📅 Yesterday — May 6, 2026 · 2,180 kcal
+      </div>
+      <div class="food-item">
+        <div class="food-emoji" style="background:#FFF7ED">☀️</div>
+        <div style="font-family:sans-serif;flex:1;padding-left:10px">
+          <div style="font-size:12px;font-weight:600;color:var(--ink)">Breakfast</div>
+          <div style="font-size:10px;color:var(--slate)">Oats + banana + maternal milk · 520 kcal</div>
         </div>
-        <div style="display:flex;gap:10px;align-items:flex-start">
-          <span style="font-size:20px">🫚</span>
-          <div><div style="font-size:12px;font-weight:600;color:var(--ink)" data-tr="pantangGinger">Halia & kunyit</div><div style="font-size:10px;color:var(--slate)" data-tr="pantangGingerSub">Anti-radang semula jadi, melancarkan peredaran darah</div></div>
+      </div>
+      <div class="food-item">
+        <div class="food-emoji" style="background:#FAFAFA">🌤</div>
+        <div style="font-family:sans-serif;flex:1;padding-left:10px">
+          <div style="font-size:12px;font-weight:600;color:var(--ink)">Lunch</div>
+          <div style="font-size:10px;color:var(--slate)">Rice + grilled salmon + spinach · 680 kcal</div>
         </div>
-        <div style="display:flex;gap:10px;align-items:flex-start">
-          <span style="font-size:20px">🥬</span>
-          <div><div style="font-size:12px;font-weight:600;color:var(--ink)" data-tr="pantangVeg">Sayur bayam & kangkung</div><div style="font-size:10px;color:var(--slate)" data-tr="pantangVegSub">Kaya zat besi & folat, baik untuk pemulihan</div></div>
+      </div>
+      <div class="food-item" style="border-bottom:none">
+        <div class="food-emoji" style="background:#EFF6FF">🌙</div>
+        <div style="font-family:sans-serif;flex:1;padding-left:10px">
+          <div style="font-size:12px;font-weight:600;color:var(--ink)">Dinner</div>
+          <div style="font-size:10px;color:var(--slate)">Wholemeal bread + eggs + avocado · 430 kcal</div>
         </div>
       </div>
     </div>
-    <div class="card" style="font-family:sans-serif;background:#FEF2F2;border-color:#FECACA">
-      <div style="font-size:13px;font-weight:bold;color:#991B1B;margin-bottom:10px" data-tr="pantangAvoidTitle">🚫 Elakkan Semasa Berpantang</div>
-      <div style="display:flex;flex-direction:column;gap:6px;font-size:11px;color:#7F1D1D;line-height:1.6">
-        <div data-tr="pantangAvoid1">❌ Makanan sejuk atau ais berlebihan</div>
-        <div data-tr="pantangAvoid2">❌ Makanan masam berlebihan (cuka, asam)</div>
-        <div data-tr="pantangAvoid3">❌ Seafood seperti udang & sotong (trimester awal)</div>
-        <div data-tr="pantangAvoid4">❌ Makanan pedas berlebihan</div>
+
+  <!-- Day 2 -->
+    <div class="card" style="margin-bottom:10px">
+      <div style="font-size:12px;font-weight:bold;color:var(--ink);margin-bottom:8px;font-family:sans-serif">
+        📅 May 5, 2026 · 2,210 kcal
+      </div>
+      <div class="food-item">
+        <div class="food-emoji" style="background:#FFF1F2">☀️</div>
+        <div style="font-family:sans-serif;flex:1;padding-left:10px">
+          <div style="font-size:12px;font-weight:600;color:var(--ink)">Breakfast</div>
+          <div style="font-size:10px;color:var(--slate)">Wholemeal toast + eggs + orange juice · 480 kcal</div>
+        </div>
+      </div>
+      <div class="food-item">
+        <div class="food-emoji" style="background:#F0FDF4">🌤</div>
+        <div style="font-family:sans-serif;flex:1;padding-left:10px">
+          <div style="font-size:12px;font-weight:600;color:var(--ink)">Lunch</div>
+          <div style="font-size:10px;color:var(--slate)">Brown rice + chicken tomato sauce + veggies · 720 kcal</div>
+        </div>
+      </div>
+      <div class="food-item" style="border-bottom:none">
+        <div class="food-emoji" style="background:#FFFBEB">🌙</div>
+        <div style="font-family:sans-serif;flex:1;padding-left:10px">
+          <div style="font-size:12px;font-weight:600;color:var(--ink)">Dinner</div>
+          <div style="font-size:10px;color:var(--slate)">Nasi lemak (half) + sambal + cucumber · 520 kcal</div>
+        </div>
+      </div>
+    </div>
+
+  <!-- Weekly Summary -->
+    <div class="card" style="background:linear-gradient(135deg,#F0FDF4,#DCFCE7);border-color:#BBF7D0">
+      <div style="font-size:13px;font-weight:bold;color:#15803D;margin-bottom:10px;font-family:sans-serif">
+        📊 This Week's Average
+      </div>
+      <div class="grid2" style="gap:8px">
+        <div style="background:white;border-radius:10px;padding:10px;text-align:center">
+          <div style="font-size:18px;font-weight:bold;color:#15803D;font-family:sans-serif">2,195</div>
+          <div style="font-size:10px;color:var(--slate);font-family:sans-serif">Avg kcal/day</div>
+        </div>
+        <div style="background:white;border-radius:10px;padding:10px;text-align:center">
+          <div style="font-size:18px;font-weight:bold;color:var(--rose);font-family:sans-serif">68g</div>
+          <div style="font-size:10px;color:var(--slate);font-family:sans-serif">Avg Protein</div>
+        </div>
+        <div style="background:white;border-radius:10px;padding:10px;text-align:center">
+          <div style="font-size:18px;font-weight:bold;color:#92400E;font-family:sans-serif">20mg</div>
+          <div style="font-size:10px;color:var(--slate);font-family:sans-serif">Avg Iron</div>
+        </div>
+        <div style="background:white;border-radius:10px;padding:10px;text-align:center">
+          <div style="font-size:18px;font-weight:bold;color:#1D4ED8;font-family:sans-serif">920mg</div>
+          <div style="font-size:10px;color:var(--slate);font-family:sans-serif">Avg Calcium</div>
+        </div>
       </div>
     </div>
   </div>
@@ -1187,7 +1239,7 @@
       <h3 style="color:var(--ink)">📊 Log Today's Vitals</h3>
       <i class="ti ti-x" style="cursor:pointer;color:var(--slate);font-size:20px" onclick="closeModal('modal-logvitals')"></i>
     </div>
- 
+
     <label style="font-size:11px;font-weight:600;color:var(--slate)">Blood Pressure (Systolic / Diastolic mmHg)</label>
     <div style="display:flex;gap:8px">
       <input type="number" id="vitalSystolic" class="input-field" placeholder="e.g. 118" min="60" max="200" style="flex:1">
@@ -1199,20 +1251,20 @@
     <input type="number" id="vitalWeight" class="input-field" placeholder="e.g. 62.4" step="0.1" min="30" max="200">
     <label style="font-size:11px;font-weight:600;color:var(--slate);display:block;margin-top:10px">Baby Kicks (today)</label>
     <input type="number" id="vitalKicks" class="input-field" placeholder="e.g. 12" min="0" max="200">
- 
+
     <!-- Live preview -->
     <div id="vitalPreview" style="margin-top:12px;background:#F0FDF4;border-radius:10px;padding:10px;border:1px solid #BBF7D0;display:none">
       <div style="font-size:10px;font-weight:700;color:#15803D;margin-bottom:4px">Preview — will update cards:</div>
       <div id="vitalPreviewText" style="font-size:11px;color:#166534;line-height:1.8"></div>
     </div>
- 
+
     <div style="display:flex;gap:8px;margin-top:16px">
       <button class="btn-outline" style="flex:1" onclick="closeModal('modal-logvitals')">Cancel</button>
       <button class="btn-rose" style="flex:1" onclick="saveVitals()">Save Vitals ✅</button>
     </div>
   </div>
 </div>
- 
+
 <!-- ═══ RESCHEDULE MODAL ═══ -->
 <div id="modal-reschedule" class="modal-overlay">
   <div class="modal" style="font-family:sans-serif">
@@ -2843,22 +2895,22 @@ Analyze the meal described and respond ONLY in this exact JSON format (no markdo
     const hr  = parseInt(document.getElementById('vitalHR').value);
     const wt  = parseFloat(document.getElementById('vitalWeight').value);
     const kk  = parseInt(document.getElementById('vitalKicks').value);
- 
+
     if (!sys || !dia){ alert('Please enter your blood pressure.'); return; }
- 
+
   // 1. Update shared state
     vitalsState.bp_sys = sys; vitalsState.bp_dia = dia;
     if (!isNaN(hr))  vitalsState.hr = hr;
     if (!isNaN(wt))  vitalsState.weight = wt;
     if (!isNaN(kk))  vitalsState.kicks = kk;
- 
+
   // 2. Update BP card
     document.getElementById('disp-bp').innerText = `${sys}/${dia}`;
     const bpHigh = sys > 140 || dia > 90, bpLow = sys < 90 || dia < 60;
     const bpEl = document.getElementById('disp-bp-range');
     bpEl.className = 'vital-range ' + (bpHigh?'range-high':bpLow?'range-low':'range-normal');
     bpEl.innerText = bpHigh ? '⚠️ High — consult Dr. Aisha' : bpLow ? '⚠️ Low — monitor closely' : 'Normal (90-140/60-90)';
- 
+
   // 3. Update HR card
     if (!isNaN(hr)){
       document.getElementById('disp-hr').innerHTML = `${hr}<span style="font-size:10px"> bpm</span>`;
@@ -2866,7 +2918,7 @@ Analyze the meal described and respond ONLY in this exact JSON format (no markdo
       hrEl.className = 'vital-range ' + (hr < 60 || hr > 100 ? 'range-high' : 'range-normal');
       hrEl.innerText = hr < 60 || hr > 100 ? '⚠️ Outside normal range' : 'Normal (60–100 bpm)';
     }
- 
+
   // 4. Update Weight card
     if (!isNaN(wt)){
       document.getElementById('disp-wt').innerHTML = `${wt}<span style="font-size:10px"> kg</span>`;
@@ -2875,7 +2927,7 @@ Analyze the meal described and respond ONLY in this exact JSON format (no markdo
       wtEl.className = 'vital-range ' + (wtHigh?'range-high':wtLow?'range-low':'range-normal');
       wtEl.innerText = wtHigh ? '⚠️ Above range' : wtLow ? '⚠️ Below range' : 'On Track (58–68 kg)';
     }
- 
+
   // 5. Update Kicks card
     if (!isNaN(kk)){
       document.getElementById('disp-kicks').innerHTML = `${kk}<span style="font-size:10px"> kicks</span>`;
@@ -2883,7 +2935,7 @@ Analyze the meal described and respond ONLY in this exact JSON format (no markdo
       kkEl.className = 'vital-range ' + (kk >= 10 ? 'range-normal' : 'range-low');
       kkEl.innerText = kk >= 10 ? '✅ Target reached! (≥10/day)' : `Target ≥10/day (${kk} so far)`;
     }
- 
+
   // 6. Flash animation on updated cards
     ['card-bp','card-hr','card-wt','card-kicks'].forEach(id => {
       const el = document.getElementById(id);
@@ -2891,16 +2943,16 @@ Analyze the meal described and respond ONLY in this exact JSON format (no markdo
       el.style.background = '#F0FDF4';
       setTimeout(() => el.style.background = 'white', 800);
     });
- 
+
     closeModal('modal-logvitals');
-  
+
   // Clear inputs
     ['vitalSystolic','vitalDiastolic','vitalHR','vitalWeight','vitalKicks'].forEach(id => {
       document.getElementById(id).value = '';
     });
     document.getElementById('vitalPreview').style.display = 'none';
   }
- 
+
 // Live preview as user types
   ['vitalSystolic','vitalDiastolic','vitalHR','vitalWeight','vitalKicks'].forEach(id => {
     document.getElementById(id).addEventListener('input', updatePreview);
@@ -2934,7 +2986,7 @@ Analyze the meal described and respond ONLY in this exact JSON format (no markdo
       mealTitle:"Meal Plan 🍱", dailyTar:"Daily Targets (2nd Trimester)", mealLog:"Today's Meal Log",
       edit:"Edit", lang:"App Language", notif:"Notifications", device:"Connected Devices", priv:"Privacy & Health Data", log:"Log Out",
       navHome:"Home", navDoc:"GrabDoc", navIbu:"Ibu Sihat", navMeal:"Meals", navProf:"Profile",
-      mealHdrLabel:"MEALS", mealPlan:"Meal Plan", mealToday:"Today", mealPantang:"Pantang Guide",
+      mealHdrLabel:"MEALS", mealPlan:"Meal Plan", mealToday:"Today", mealPantang: "Meal History",
       calorieSummary:"Calorie Summary", mealLogToday:"Today's Meal Log",
       macroCarbs:"Carbohydrates 38%", macroProtein:"Protein 26%", macroFat:"Fat 19%", macroFiber:"Fiber 17%",
       labelCalcium:"Calcium", labelIron:"Iron", labelFolicAcid:"Folic Acid",
@@ -2986,7 +3038,7 @@ Analyze the meal described and respond ONLY in this exact JSON format (no markdo
       mealTitle:"Pelan Makanan 🍱", dailyTar:"Sasaran Harian (Trimester 2)", mealLog:"Log Makanan Hari Ini",
       edit:"Sunting", lang:"Bahasa Aplikasi", notif:"Notifikasi", device:"Peranti Bersambung", priv:"Privasi & Data Kesihatan", log:"Log Keluar",
       navHome:"Utama", navDoc:"GrabDoc", navIbu:"Ibu Sihat", navMeal:"Makanan", navProf:"Profil",
-      mealHdrLabel:"PEMAKANAN", mealPlan:"Rancangan Makan", mealToday:"Hari Ini", mealPantang:"Pantang Guide",
+      mealHdrLabel:"PEMAKANAN", mealPlan:"Rancangan Makan", mealToday:"Hari Ini", mealPantang: "Sejarah Makanan",
       calorieSummary:"Ringkasan Kalori", mealLogToday:"Log Makanan Hari Ini",
       macroCarbs:"Karbohidrat 38%", macroProtein:"Protein 26%", macroFat:"Lemak 19%", macroFiber:"Serat 17%",
       labelCalcium:"Kalsium", labelIron:"Zat Besi", labelFolicAcid:"Asid Folik",
