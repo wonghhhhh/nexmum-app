@@ -39,9 +39,6 @@ Bahasa Malaysia) mobile platform:
 https://wonghhhhh.github.io/nexmum-app/
 *Anthropic API Key (must insert at the log in page)
 
-📹 Demo Video
-https://drive.google.com/file/d/1z7LmFM6I2kfGdnMswsvuZKpTiYbqlwAI/view?usp=drive_link
-
 👥 Team
 Elvis Tan Jun Ming, Wong Ze-An, Doris Ooi Yi Fei, Ong Jun Kit
 Dr Vernoon Ang Wei Neng (Advisor)
