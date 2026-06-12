@@ -4894,11 +4894,7 @@ Include all 7 days (Monday–Sunday).`,
     try {
       const response = await fetch("https://nexmum-proxy.vercel.app/api/claude", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "anthropic-version": "2023-06-01",
-          "anthropic-dangerous-direct-browser-access": "true"  // ✅ Required for browser fetch
-        },
+        headers: getApiHeaders(),
         body: JSON.stringify({
           model: "claude-haiku-4-5-20251001",
           max_tokens: 150,
